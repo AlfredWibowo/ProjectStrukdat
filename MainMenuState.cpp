@@ -11,7 +11,7 @@ void MainMenuState::Init(sf::RenderWindow& _window)
 	}
 	_title.setFont(_font);
 	_title.setString("RACING TOKEN");
-	_title.setPosition(sf::Vector2f((1000 - _title.getGlobalBounds().width) / 2, 56));
+	_title.setPosition(sf::Vector2f((1000 - _title.getGlobalBounds().width) / 2, 20));
 	_title.setCharacterSize(80);
 
 
@@ -74,12 +74,12 @@ void MainMenuState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vec
 		if (_tutorialButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 		{
 			_tutorialButton.setFillColor(sf::Color::Yellow);
-			/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
 				std::cout << "Click" << std::endl;
-				_state.push_back(new GameState);
+				_state.push_back(new TutorialState);
 				_state.back()->Init(_window);
-			}*/
+			}
 		}
 		else
 		{

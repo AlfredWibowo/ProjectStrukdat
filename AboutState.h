@@ -10,7 +10,7 @@ public:
 	void Draw(sf::RenderWindow& _window);
 
 private:
-	sf::Text _info;
+	sf::Text _info, _title;
 	sf::Font _font;
 	sf::RectangleShape _backButton;
 	sf::Texture _backTexture;

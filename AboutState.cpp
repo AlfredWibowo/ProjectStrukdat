@@ -3,17 +3,24 @@
 void AboutState::Init(sf::RenderWindow& _window)
 {
 	_window.setTitle("About Developer");
+
+	//title
 	if (!_font.loadFromFile(FONT))
 	{
 		std::cout << "Failed to Open File" << std::endl;
 	}
+	_title.setFont(_font);
+	_title.setString("ABOUT US");
+	_title.setPosition(sf::Vector2f((1000 - _title.getGlobalBounds().width) / 2, 20));
+	_title.setCharacterSize(80);
 	
+	//isi about
 	_info.setString("Nama - NRP \n\nAnderson - c14190014 \n\nAlfred - c14190016 \n\nFebri - c14190039");
 	_info.setFont(_font);
 	_info.setPosition(sf::Vector2f(1000 / 2 - 200, 200));
 	_info.setFillColor(sf::Color::Red);
 
-
+	//back button
 	if (!_backTexture.loadFromFile(BACK_BUTTON))
 	{
 		std::cout << "Failed to Open File" << std::endl;
@@ -57,6 +64,7 @@ void AboutState::Update(sf::RenderWindow& _window, std::vector<State*>& _state)
 void AboutState::Draw(sf::RenderWindow& _window)
 {
 	_window.clear();
+	_window.draw(_title);
 	_window.draw(_info);
 	_window.draw(_backButton);
 	_window.display();
