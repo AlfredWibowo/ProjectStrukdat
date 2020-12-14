@@ -1,2 +1,7 @@
-﻿  MainMenuState.cpp
-  ProjectStrukdat.vcxproj -> E:\alfred c14190016\Semester 3\STRUKTUR DATA\ProjectStrukdat\Debug\ProjectStrukdat.exe
+﻿  AboutState.cpp
+  GameState.cpp
+  main.cpp
+  MainMenuState.cpp
+  Generating Code...
+C:\Users\windows10\source\repos\ProjectStrukdat\ProjectStrukdat\main.cpp(26,20): warning C4018: '<': signed/unsigned mismatch
+  ProjectStrukdat.vcxproj -> C:\Users\windows10\source\repos\ProjectStrukdat\Debug\ProjectStrukdat.exe
