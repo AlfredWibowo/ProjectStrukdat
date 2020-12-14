@@ -4,17 +4,34 @@
 
 void MainMenuState::Init(sf::RenderWindow& _window)
 {
+	//title
+	if (!_font.loadFromFile(FONT))
+	{
+		std::cout << "Failed to Open File" << std::endl;
+	}
+	_title.setFont(_font);
+	_title.setString("RACING TOKEN");
+	_title.setPosition(sf::Vector2f((1000 - _title.getGlobalBounds().width) / 2, 56));
+	_title.setCharacterSize(80);
+
+
 	//button
-	sf::Vector2f buttonSize(500, 200);
+	sf::Vector2f buttonSize(400, 100);
 	_playButton.setSize(buttonSize);
 	_aboutButton.setSize(buttonSize);
-
+	_tutorialButton.setSize(buttonSize);
 	//texture
 	if (!_playTexture.loadFromFile(PLAY_BUTTON))
 	{
 		std::cout << "Failed to Open File" << std::endl;
 	}
 	_playButton.setTexture(&_playTexture);
+
+	if (!_tutorialTexture.loadFromFile(TUTORIAL_BUTTON))
+	{
+		std::cout << "Failed to Open File" << std::endl;
+	}
+	_tutorialButton.setTexture(&_tutorialTexture);
 
 	if (!_aboutTexture.loadFromFile(ABOUT_BUTTON))
 	{
@@ -23,8 +40,10 @@ void MainMenuState::Init(sf::RenderWindow& _window)
 	_aboutButton.setTexture(&_aboutTexture);
 
 	//position button
-	_playButton.setPosition(sf::Vector2f(1000 / 2 - 200, 56));
-	_aboutButton.setPosition(sf::Vector2f(1000 / 2 - 200, 356));
+
+	_playButton.setPosition(sf::Vector2f(1000 / 2 - 200, 600/3));
+	_tutorialButton.setPosition(sf::Vector2f(1000 / 2 - 200, 600/3 + buttonSize.y + 10));
+	_aboutButton.setPosition(sf::Vector2f(1000 / 2 - 200, 600 / 3 + (2 * buttonSize.y) + 20));
 
 }
 void MainMenuState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
@@ -52,6 +71,21 @@ void MainMenuState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vec
 			_playButton.setFillColor(sf::Color::White);
 		}
 
+		if (_tutorialButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
+		{
+			_tutorialButton.setFillColor(sf::Color::Yellow);
+			/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				std::cout << "Click" << std::endl;
+				_state.push_back(new GameState);
+				_state.back()->Init(_window);
+			}*/
+		}
+		else
+		{
+			_tutorialButton.setFillColor(sf::Color::White);
+		}
+
 		if (_aboutButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 		{
 			_aboutButton.setFillColor(sf::Color::Yellow);
@@ -76,7 +110,9 @@ void MainMenuState::Update(sf::RenderWindow& _window, std::vector<State*>& _stat
 void MainMenuState::Draw(sf::RenderWindow& _window)
 {
 	_window.clear();
+	_window.draw(_title);
 	_window.draw(_playButton);
+	_window.draw(_tutorialButton);
 	_window.draw(_aboutButton);
 	_window.display();
 }

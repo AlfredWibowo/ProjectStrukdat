@@ -14,7 +14,7 @@ int main()
 		sf::Event _event;
 		_state.back()->Init(_window);
 		_state.back()->Input(_window, _event, _state);
-		//_state.back()->Update(_window, _state);
+		_state.back()->Update(_window, _state);
 		_state.back()->Draw(_window);
 
 		if (_state.size() > 3)

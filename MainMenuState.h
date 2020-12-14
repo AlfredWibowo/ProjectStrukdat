@@ -13,8 +13,9 @@ public:
 	void Update(sf::RenderWindow& _window, std::vector<State*>& _state);
 	void Draw(sf::RenderWindow& _window);
 private:
-	sf::Texture _playTexture, _aboutTexture;
+	sf::Texture _playTexture, _aboutTexture, _tutorialTexture;
 	sf::Font _font;
-	sf::RectangleShape _playButton, _aboutButton;
+	sf::Text _title;
+	sf::RectangleShape _playButton, _aboutButton, _tutorialButton;
 };
 
