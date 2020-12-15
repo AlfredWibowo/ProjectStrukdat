@@ -9,5 +9,7 @@ public:
 	void Update(sf::RenderWindow& _window, std::vector<State*>& _state);
 	void Draw(sf::RenderWindow& _window);
 private:
+	sf::RectangleShape Dice;
+	sf::Texture Dicehead[6];
 };
 

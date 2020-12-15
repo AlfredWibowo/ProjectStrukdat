@@ -5,6 +5,7 @@
 
 int main()
 {
+	srand(time(NULL));
 	sf::RenderWindow _window(sf::VideoMode(1000, 600), "Ludo Menu");
 	std::vector<State*> _state;
 	_state.push_back(new MainMenuState);

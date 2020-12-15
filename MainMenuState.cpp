@@ -77,7 +77,7 @@ void MainMenuState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vec
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
 				std::cout << "Click" << std::endl;
-				_state.push_back(new TutorialState);
+				/*_state.push_back(new TutorialState);*/
 				_state.back()->Init(_window);
 			}
 		}

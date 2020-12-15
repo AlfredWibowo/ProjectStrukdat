@@ -3,10 +3,19 @@
 void GameState::Init(sf::RenderWindow& _window)
 {
 	_window.setTitle("Ludo Game");
+	_window.setFramerateLimit(240);
 	/*if (!_font.loadfromfile(font))
 	{
 		std::cout << "failed to open file" << std::endl;
 	}*/
+	Dice.setSize(sf::Vector2f(300, 300));
+	Dice.setPosition(_window.getSize().x / 2 - 300, _window.getSize().y / 2 - 300);
+	Dicehead[0].loadFromFile(DICE_ONE);
+	Dicehead[1].loadFromFile(DICE_TWO);
+	Dicehead[2].loadFromFile(DICE_THREE);
+	Dicehead[3].loadFromFile(DICE_FOUR);
+	Dicehead[4].loadFromFile(DICE_FIVE);
+	Dicehead[5].loadFromFile(DICE_SIX);
 }	
 
 void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
@@ -45,10 +54,13 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 void GameState::Update(sf::RenderWindow& _window, std::vector<State*>& _state)
 {
-
+	//dice animation
+	int random = rand() % 5;
+	Dice.setTexture(&Dicehead[random]);
 }
 void GameState::Draw(sf::RenderWindow& _window)
 {
 	_window.clear();
+	_window.draw(Dice);
 	_window.display();
 }
