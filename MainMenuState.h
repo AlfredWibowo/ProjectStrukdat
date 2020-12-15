@@ -4,8 +4,9 @@
 #include "AboutState.h"
 #include "GameState.h"
 #include "Definition.h"
+#include "TutorialState.h"
 
-class MainMenuState : public State
+class MainMenuState :public State
 {
 public:
 	void Init(sf::RenderWindow& _window);
