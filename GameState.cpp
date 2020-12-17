@@ -14,16 +14,89 @@ void GameState::Init(sf::RenderWindow& _window)
 	_rollButton.setSize(sf::Vector2f(250, 100));
 	_rollButton.setPosition(sf::Vector2f(1000 - _rollButton.getSize().x - 50, 600 - _rollButton.getSize().y));
 
-	Dice.setSize(sf::Vector2f(300, 300));
-	Dice.setPosition(_window.getSize().x / 2 - 300, _window.getSize().y / 2 - 300);
-	Dicehead[0].loadFromFile(DICE_ONE);
-	Dicehead[1].loadFromFile(DICE_TWO);
-	Dicehead[2].loadFromFile(DICE_THREE);
-	Dicehead[3].loadFromFile(DICE_FOUR);
-	Dicehead[4].loadFromFile(DICE_FIVE);
-	Dicehead[5].loadFromFile(DICE_SIX);
 
+	//dice
+	_dice.setSize(sf::Vector2f(80, 80));
+	_dice.setPosition(_window.getSize().x / 2 - 300, _window.getSize().y / 2 - 300);
+	_diceHead[0].loadFromFile(DICE_ONE);
+	_diceHead[1].loadFromFile(DICE_TWO);
+	_diceHead[2].loadFromFile(DICE_THREE);
+	_diceHead[3].loadFromFile(DICE_FOUR);
+	_diceHead[4].loadFromFile(DICE_FIVE);
+	_diceHead[5].loadFromFile(DICE_SIX);
+	
+	_dice.setPosition(sf::Vector2f(1000 - 215, 600 -_rollButton.getSize().y - _dice.getSize().y - 50));
+	_dice.setTexture(&_diceHead[5]);
 
+	//map
+	if (!_mapTexture.loadFromFile(MAP_BG))
+	{
+		std::cout << "failed to open file" << std::endl;
+	}
+	_mapSprite.setTexture(_mapTexture);
+
+	//pion
+	_pionTexture[0].loadFromFile(PION_HIJAU);
+	_pionTexture[1].loadFromFile(PION_KUNING);
+	_pionTexture[2].loadFromFile(PION_BIRU);
+	_pionTexture[3].loadFromFile(PION_MERAH);
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			_pionSprite[i][j].setTexture(_pionTexture[i]);
+		}
+	}
+
+	//pion position
+	_pionSprite[0][0].setPosition(sf::Vector2f(113, 75));
+	_pionSprite[0][1].setPosition(sf::Vector2f(75, 113));
+	_pionSprite[0][2].setPosition(sf::Vector2f(113, 151));
+	_pionSprite[0][3].setPosition(sf::Vector2f(151, 113));
+	for (int i = 0, j = 0; j < 4; j++)
+	{
+		_pionSprite[i][j].setTexture(_pionTexture[i]);
+	}
+												 
+
+	_pionSprite[1][0].setPosition(sf::Vector2f(113, 414));
+	_pionSprite[1][1].setPosition(sf::Vector2f(75, 452));
+	_pionSprite[1][2].setPosition(sf::Vector2f(113, 490));
+	_pionSprite[1][3].setPosition(sf::Vector2f(151, 452));
+	for (int i = 1, j = 0; j < 4; j++)
+	{
+		_pionSprite[i][j].setTexture(_pionTexture[i]);
+	}
+												
+	_pionSprite[2][0].setPosition(sf::Vector2f(452, 414));
+	_pionSprite[2][1].setPosition(sf::Vector2f(414, 452));
+	_pionSprite[2][2].setPosition(sf::Vector2f(452, 490));
+	_pionSprite[2][3].setPosition(sf::Vector2f(490, 452));
+	for (int i = 2, j = 0; j < 4; j++)
+	{
+		_pionSprite[i][j].setTexture(_pionTexture[i]);
+	}
+
+	_pionSprite[3][0].setPosition(sf::Vector2f(452, 75));
+	_pionSprite[3][1].setPosition(sf::Vector2f(414, 113));
+	_pionSprite[3][2].setPosition(sf::Vector2f(452, 151));
+	_pionSprite[3][3].setPosition(sf::Vector2f(490, 113));
+	for (int i = 3, j = 0; j < 4; j++)
+	{
+		_pionSprite[i][j].setTexture(_pionTexture[i]);
+	}
+
+	//turn
+	if (!_font.loadFromFile(FONT))
+	{
+		std::cout << "failed to open file" << std::endl;
+	}
+	_turn.setFont(_font);
+	_turn.setPosition(sf::Vector2f(1000 - _turn.getGlobalBounds().width - 50, 20));
+	_turn.setString("GREEN TURN");
+	_turn.setFillColor(sf::Color::Green);
+	_turn.setCharacterSize(50);
 }	
 
 void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
@@ -36,7 +109,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 		}
 
 		sf::Vector2i MousePos(sf::Mouse::getPosition(_window));
-		if (_rollButton.getGlobalBounds().contains((float)MousePos.x, (float)MousePos.y))
+		if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 		{
 			_rollButton.setFillColor(sf::Color::Yellow);
 		/*	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -62,14 +135,23 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 void GameState::Update(sf::RenderWindow& _window, std::vector<State*>& _state)
 {
-	//dice animation
-	int random = rand() % 5;
-	Dice.setTexture(&Dicehead[random]);
+	//_dice animation
+	/*int random = rand() % 5;
+	_dice.setTexture(&_dicehead[random]);*/
 }
 void GameState::Draw(sf::RenderWindow& _window)
 {
 	_window.clear();
+	_window.draw(_mapSprite);
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			_window.draw(_pionSprite[i][j]);
+		}
+	}
+	_window.draw(_turn);
 	_window.draw(_rollButton);
-	_window.draw(Dice);
+	_window.draw(_dice);
 	_window.display();
 }
