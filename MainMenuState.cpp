@@ -11,15 +11,21 @@ void MainMenuState::Init(sf::RenderWindow& _window)
 	}
 	_title.setFont(_font);
 	_title.setString("RACING TOKEN");
-	_title.setPosition(sf::Vector2f((1000 - _title.getGlobalBounds().width) / 2, 20));
+	_title.setOrigin(_title.getGlobalBounds().width, _title.getGlobalBounds().height / 2);
+	_title.setPosition(sf::Vector2f(_window.getSize().x / 2 - 60 , 20));
 	_title.setCharacterSize(80);
 
 
 	//button
 	sf::Vector2f buttonSize(400, 100);
 	_playButton.setSize(buttonSize);
+	_playButton.setOrigin(_playButton.getGlobalBounds().width / 2, _playButton.getGlobalBounds().height / 2);
 	_aboutButton.setSize(buttonSize);
+	_aboutButton.setOrigin(_aboutButton.getGlobalBounds().width / 2, _aboutButton.getGlobalBounds().height / 2);
 	_tutorialButton.setSize(buttonSize);
+	_tutorialButton.setOrigin(_tutorialButton.getGlobalBounds().width / 2, _tutorialButton.getGlobalBounds().height / 2);
+
+
 	//texture
 	if (!_playTexture.loadFromFile(PLAY_BUTTON))
 	{
@@ -41,9 +47,9 @@ void MainMenuState::Init(sf::RenderWindow& _window)
 
 	//position button
 
-	_playButton.setPosition(sf::Vector2f(1000 / 2 - 200, 600/3));
-	_tutorialButton.setPosition(sf::Vector2f(1000 / 2 - 200, 600/3 + buttonSize.y + 10));
-	_aboutButton.setPosition(sf::Vector2f(1000 / 2 - 200, 600 / 3 + (2 * buttonSize.y) + 20));
+	_playButton.setPosition(sf::Vector2f(_window.getSize().x/2, 600/3));
+	_tutorialButton.setPosition(sf::Vector2f(_window.getSize().x / 2, 600/3 + buttonSize.y + 20));
+	_aboutButton.setPosition(sf::Vector2f(_window.getSize().x / 2, 600 / 3 + (2 * buttonSize.y) + 50));
 
 }
 void MainMenuState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)

@@ -92,11 +92,29 @@ void GameState::Init(sf::RenderWindow& _window)
 	{
 		std::cout << "failed to open file" << std::endl;
 	}
-	_turn.setFont(_font);
-	_turn.setPosition(sf::Vector2f(1000 - _turn.getGlobalBounds().width - 50, 20));
-	_turn.setString("GREEN TURN");
-	_turn.setFillColor(sf::Color::Green);
-	_turn.setCharacterSize(50);
+	for (int i = 0; i < 4; i++)
+	{
+		_turn[i].setFont(_font);
+		_turn[i].setCharacterSize(50);
+		_turn[i].setPosition(sf::Vector2f(650, 25));
+	}
+	
+	_turn[0].setString("GREEN TURN");
+	_turn[1].setString("YELLOW TURN");
+	_turn[2].setString("RED TURN");
+	_turn[3].setString("BLUE TURN");
+
+	_turn[0].setFillColor(sf::Color::Green);
+	_turn[1].setFillColor(sf::Color::Yellow);
+	_turn[2].setFillColor(sf::Color::Red);
+	_turn[3].setFillColor(sf::Color::Blue);
+
+	//background
+	_bg.setFillColor(sf::Color::Cyan);
+	_bg.setSize(sf::Vector2f(1000, 600));
+
+	//LDL
+
 }	
 
 void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
@@ -109,15 +127,22 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 		}
 
 		sf::Vector2i MousePos(sf::Mouse::getPosition(_window));
+
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			std::cout << MousePos.x <<","<< MousePos.y << std::endl;
+		}
+
 		if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 		{
 			_rollButton.setFillColor(sf::Color::Yellow);
-		/*	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
 				std::cout << "Click" << std::endl;
-				_state.push_back(new MainMenuState);
-				_state.back()->Init(_window);
-			}*/
+				int random = rand() % 6 + 1;
+				std::cout << random << std::endl;
+				_dice.setTexture(&_diceHead[random - 1]);
+			}
 		}
 		else
 		{
@@ -136,12 +161,12 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 void GameState::Update(sf::RenderWindow& _window, std::vector<State*>& _state)
 {
 	//_dice animation
-	/*int random = rand() % 5;
-	_dice.setTexture(&_dicehead[random]);*/
+	
 }
 void GameState::Draw(sf::RenderWindow& _window)
 {
 	_window.clear();
+	_window.draw(_bg);
 	_window.draw(_mapSprite);
 	for (int i = 0; i < 4; i++)
 	{
@@ -150,7 +175,7 @@ void GameState::Draw(sf::RenderWindow& _window)
 			_window.draw(_pionSprite[i][j]);
 		}
 	}
-	_window.draw(_turn);
+	_window.draw(_turnFix);
 	_window.draw(_rollButton);
 	_window.draw(_dice);
 	_window.display();

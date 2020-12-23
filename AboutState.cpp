@@ -11,15 +11,10 @@ void AboutState::Init(sf::RenderWindow& _window)
 	}
 	_title.setFont(_font);
 	_title.setString("ABOUT US");
-	_title.setPosition(sf::Vector2f((1000 - _title.getGlobalBounds().width) / 2, 20));
+	_title.setOrigin(_title.getGlobalBounds().width, _title.getGlobalBounds().height / 2);
+	_title.setPosition(sf::Vector2f(_window.getSize().x / 2 - 60, 20));
 	_title.setCharacterSize(80);
 	
-	//isi about
-	_info.setString("Nama - NRP \n\nAnderson - c14190014 \n\nAlfred - c14190016 \n\nFebri - c14190039");
-	_info.setFont(_font);
-	_info.setPosition(sf::Vector2f(1000 / 2 - 200, 200));
-	_info.setFillColor(sf::Color::Red);
-
 	//back button
 	if (!_backTexture.loadFromFile(BACK_BUTTON))
 	{
@@ -28,6 +23,14 @@ void AboutState::Init(sf::RenderWindow& _window)
 	_backButton.setTexture(&_backTexture);
 	_backButton.setSize(sf::Vector2f(250, 100));
 	_backButton.setPosition(sf::Vector2f(1000 - _backButton.getSize().x, 600 - _backButton.getSize().y));
+
+	//background
+	if (!_bgTexture.loadFromFile(ABOUT_BG))
+	{
+		std::cout << "Failed to Open File" << std::endl;
+	}
+	_bg.setTexture(&_bgTexture);
+	_bg.setSize(sf::Vector2f(1000, 600));
 }
 
 void AboutState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
@@ -64,8 +67,9 @@ void AboutState::Update(sf::RenderWindow& _window, std::vector<State*>& _state)
 void AboutState::Draw(sf::RenderWindow& _window)
 {
 	_window.clear();
+	_window.draw(_bg);
 	_window.draw(_title);
-	_window.draw(_info);
+	//_window.draw(_info);
 	_window.draw(_backButton);
 	_window.display();
 }

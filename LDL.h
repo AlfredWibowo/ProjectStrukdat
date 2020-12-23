@@ -22,7 +22,7 @@ public:
 	}
 };
 
-class CDL
+class LDL
 {
 private:
 	Node* head;
@@ -30,7 +30,7 @@ private:
 	int size;
 
 public:
-	CDL()
+	LDL()
 	{
 		head = NULL;
 		tail = NULL;
@@ -53,8 +53,6 @@ public:
 			tail = temp;
 
 		}
-		head->prev = tail;
-		tail->next = head;
 	}
 
 	void view()

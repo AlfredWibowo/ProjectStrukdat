@@ -1,6 +1,6 @@
 #pragma once
 #include "MainMenuState.h"
-#include "CDL.h"
+#include "LDL.h"
 
 class GameState :public State
 {
@@ -18,6 +18,9 @@ private:
 	sf::Sprite _pionSprite[4][4];
 	sf::Texture _pionTexture[4];
 	sf::Font _font;
-	sf::Text _turn;
+	sf::Text _turn[4];
+	sf::Text _turnFix;
+	sf::RectangleShape _bg;
+	LDL _mapLuar;
 };
 

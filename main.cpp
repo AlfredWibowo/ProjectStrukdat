@@ -2,18 +2,20 @@
 #include "State.h"
 #include "MainMenuState.h"
 #include <vector>
+#include <time.h>
+#include <stdlib.h>
 
 int main()
 {
 	srand(time(NULL));
-	sf::RenderWindow _window(sf::VideoMode(1000, 600), "Ludo Menu");
+	sf::RenderWindow _window(sf::VideoMode(1000, 600), "Ludo Menu", sf::Style::Close);
 	std::vector<State*> _state;
 	_state.push_back(new MainMenuState);
+	_state.back()->Init(_window);
 
 	while (_window.isOpen())
 	{
 		sf::Event _event;
-		_state.back()->Init(_window);
 		_state.back()->Input(_window, _event, _state);
 		_state.back()->Update(_window, _state);
 		_state.back()->Draw(_window);

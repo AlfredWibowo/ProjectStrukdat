@@ -11,7 +11,8 @@ void TutorialState::Init(sf::RenderWindow& _window)
 	}
 	_title.setFont(_font);
 	_title.setString("TUTORIAL");
-	_title.setPosition(sf::Vector2f((1000 - _title.getGlobalBounds().width) / 2, 20));
+	_title.setOrigin(_title.getGlobalBounds().width, _title.getGlobalBounds().height / 2);
+	_title.setPosition(sf::Vector2f(_window.getSize().x / 2 - 60, 20));
 	_title.setCharacterSize(80);
 
 	//back button
