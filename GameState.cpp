@@ -114,7 +114,131 @@ void GameState::Init(sf::RenderWindow& _window)
 	_bg.setSize(sf::Vector2f(1000, 600));
 
 	//LDL
+	//map luar (kiri -> kanan)
 
+	//pintu masuk hijau
+	_mapLuar.add(56, 245);
+	_pintuMasuk[0] = _mapLuar.getTail();
+
+	//daerah putih
+	_mapLuar.add(94, 245);
+	_mapLuar.add(132, 245);
+	_mapLuar.add(169, 245);
+	_mapLuar.add(207, 245);
+	_mapLuar.add(245, 207);
+	_mapLuar.add(245, 169);
+	_mapLuar.add(245, 131);
+	_mapLuar.add(245, 94);
+	_mapLuar.add(245, 57);
+	_mapLuar.add(245, 19);
+
+	//pintu keluar merah
+	_mapLuar.add(282, 19);
+	_pintuKeluar[3] = _mapLuar.getTail();
+
+	//daerah putih
+	_mapLuar.add(320, 19);
+
+	//pintu masuk merah
+	_mapLuar.add(320, 57);
+	_pintuMasuk[3] = _mapLuar.getTail();
+
+	//daerah putih
+	_mapLuar.add(320, 94);
+	_mapLuar.add(320, 131);
+	_mapLuar.add(320, 169);
+	_mapLuar.add(320, 207);
+	_mapLuar.add(357, 245);
+	_mapLuar.add(395, 245);
+	_mapLuar.add(433, 245);
+	_mapLuar.add(470, 245);
+	_mapLuar.add(508, 245);
+	_mapLuar.add(545, 245);
+
+	//pintu keluar biru
+	_mapLuar.add(545, 282);
+	_pintuKeluar[2] = _mapLuar.getTail();
+
+	//daerah putih
+	_mapLuar.add(545, 320);
+
+	//pintu masuk biru
+	_mapLuar.add(508, 320);
+	_pintuMasuk[2] = _mapLuar.getTail();
+
+	//daerah putih
+	_mapLuar.add(470, 320);
+	_mapLuar.add(433, 320);
+	_mapLuar.add(395, 320);
+	_mapLuar.add(357, 320);
+	_mapLuar.add(320, 358);
+	_mapLuar.add(320, 395);
+	_mapLuar.add(320, 433);
+	_mapLuar.add(320, 470);
+	_mapLuar.add(320, 508);
+	_mapLuar.add(320, 545);
+
+	//pintu keluar kuning
+	_mapLuar.add(282, 545);
+	_pintuKeluar[1] = _mapLuar.getTail();
+
+	//daerah putih
+	_mapLuar.add(245, 545);
+
+	//pintu masuk kuning
+	_mapLuar.add(245, 508);
+	_pintuMasuk[1] = _mapLuar.getTail();
+
+	//daerah putih
+	_mapLuar.add(245, 470);
+	_mapLuar.add(245, 433);
+	_mapLuar.add(245, 395);
+	_mapLuar.add(245, 358);
+	_mapLuar.add(207, 320);
+	_mapLuar.add(169, 320);
+	_mapLuar.add(132, 320);
+	_mapLuar.add(94, 320);
+	_mapLuar.add(56, 320);
+	_mapLuar.add(19, 320);
+
+	//pintu keluar hijau
+	_mapLuar.add(19, 282);
+	_pintuKeluar[0] = _mapLuar.getTail();
+
+	//daerah putih
+	_mapLuar.add(19, 245);
+
+	//map hiaju
+	_mapWarna[0].add(56, 282);
+	_mapWarna[0].add(94, 282);
+	_mapWarna[0].add(132, 282);
+	_mapWarna[0].add(169, 282);
+	_mapWarna[0].add(207, 282);
+	_mapWarna[0].add(245, 282);
+	
+	//map kuning
+	_mapWarna[1].add(282, 508);
+	_mapWarna[1].add(282, 470);
+	_mapWarna[1].add(282, 433);
+	_mapWarna[1].add(282, 395);
+	_mapWarna[1].add(282, 358);
+	_mapWarna[1].add(282, 320);
+
+	//map biru
+	_mapWarna[2].add(508, 282);
+	_mapWarna[2].add(470, 282);
+	_mapWarna[2].add(433, 282);
+	_mapWarna[2].add(395, 282);
+	_mapWarna[2].add(357, 282);
+	_mapWarna[2].add(320, 282);
+
+	//map merah
+	 _mapWarna[3].add(282, 57);
+	 _mapWarna[3].add(282, 94);
+	 _mapWarna[3].add(282, 131);
+	 _mapWarna[3].add(282, 169);
+	 _mapWarna[3].add(282, 207);
+	 _mapWarna[3].add(282, 245);
 }	
 
 void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
