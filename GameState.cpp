@@ -41,14 +41,6 @@ void GameState::Init(sf::RenderWindow& _window)
 	_pionTexture[2].loadFromFile(PION_BIRU);
 	_pionTexture[3].loadFromFile(PION_MERAH);
 
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			_pionSprite[i][j].setTexture(_pionTexture[i]);
-		}
-	}
-
 	//pion position
 	_pionSprite[0][0].setPosition(sf::Vector2f(113, 75));
 	_pionSprite[0][1].setPosition(sf::Vector2f(75, 113));
@@ -118,7 +110,7 @@ void GameState::Init(sf::RenderWindow& _window)
 
 	//pintu masuk hijau
 	_mapLuar.add(56, 245);
-	_pintuMasuk[0] = _mapLuar.getTail();
+	_entry[0] = _mapLuar.getTail();
 
 	//daerah putih
 	_mapLuar.add(94, 245);
@@ -134,14 +126,14 @@ void GameState::Init(sf::RenderWindow& _window)
 
 	//pintu keluar merah
 	_mapLuar.add(282, 19);
-	_pintuKeluar[3] = _mapLuar.getTail();
+	_exit[3] = _mapLuar.getTail();
 
 	//daerah putih
 	_mapLuar.add(320, 19);
 
 	//pintu masuk merah
 	_mapLuar.add(320, 57);
-	_pintuMasuk[3] = _mapLuar.getTail();
+	_entry[3] = _mapLuar.getTail();
 
 	//daerah putih
 	_mapLuar.add(320, 94);
@@ -157,14 +149,14 @@ void GameState::Init(sf::RenderWindow& _window)
 
 	//pintu keluar biru
 	_mapLuar.add(545, 282);
-	_pintuKeluar[2] = _mapLuar.getTail();
+	_exit[2] = _mapLuar.getTail();
 
 	//daerah putih
 	_mapLuar.add(545, 320);
 
 	//pintu masuk biru
 	_mapLuar.add(508, 320);
-	_pintuMasuk[2] = _mapLuar.getTail();
+	_entry[2] = _mapLuar.getTail();
 
 	//daerah putih
 	_mapLuar.add(470, 320);
@@ -180,14 +172,14 @@ void GameState::Init(sf::RenderWindow& _window)
 
 	//pintu keluar kuning
 	_mapLuar.add(282, 545);
-	_pintuKeluar[1] = _mapLuar.getTail();
+	_exit[1] = _mapLuar.getTail();
 
 	//daerah putih
 	_mapLuar.add(245, 545);
 
 	//pintu masuk kuning
 	_mapLuar.add(245, 508);
-	_pintuMasuk[1] = _mapLuar.getTail();
+	_entry[1] = _mapLuar.getTail();
 
 	//daerah putih
 	_mapLuar.add(245, 470);
@@ -203,7 +195,7 @@ void GameState::Init(sf::RenderWindow& _window)
 
 	//pintu keluar hijau
 	_mapLuar.add(19, 282);
-	_pintuKeluar[0] = _mapLuar.getTail();
+	_exit[0] = _mapLuar.getTail();
 
 	//daerah putih
 	_mapLuar.add(19, 245);
@@ -239,6 +231,8 @@ void GameState::Init(sf::RenderWindow& _window)
 	 _mapWarna[3].add(282, 169);
 	 _mapWarna[3].add(282, 207);
 	 _mapWarna[3].add(282, 245);
+
+	 _turnFix = _turn[_giliran];
 }	
 
 void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
@@ -263,9 +257,19 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
 				std::cout << "Click" << std::endl;
-				int random = rand() % 6 + 1;
-				std::cout << random << std::endl;
-				_dice.setTexture(&_diceHead[random - 1]);
+				_move = rand() % 6 + 1;
+				_dice.setTexture(&_diceHead[_move - 1]);
+
+				if (_move != 6)
+				{
+					_giliran++;
+				}
+				if (_giliran > 3)
+				{
+					_giliran = 0;
+				}
+
+				_turnFix = _turn[_giliran];
 			}
 		}
 		else
@@ -284,7 +288,6 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 void GameState::Update(sf::RenderWindow& _window, std::vector<State*>& _state)
 {
-	//_dice animation
 	
 }
 void GameState::Draw(sf::RenderWindow& _window)

@@ -6,19 +6,18 @@ class Node
 {
 public:
 
-	int _posX, _posY, _markas;
-	std::string _warnaPion;
+	int _posX, _posY;
 	Node* next;
 	Node* prev;
+	int _Out;
 
-	Node(int posX, int posY, int markas, std::string warnaPion)
+	Node(int posX, int posY)
 	{
 		_posX = posX;
 		_posY = posY;
-		_markas = markas;
-		_warnaPion = warnaPion;
 		next = NULL;
 		prev = NULL;
+		_Out = 1;
 	}
 };
 
@@ -37,9 +36,9 @@ public:
 		size = 0;
 	}
 
-	void add(int posX, int posY, int markas, std::string warnaPion)
+	void add(int posX, int posY)
 	{
-		Node* temp = new Node(posX, posY, markas, warnaPion);
+		Node* temp = new Node(posX, posY);
 
 		if (head == NULL)
 		{
