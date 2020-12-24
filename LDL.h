@@ -9,25 +9,13 @@ public:
 	int _posX, _posY;
 	Node* next;
 	Node* prev;
-	int _Out;
-	bool _markas;
 
 	Node(int posX, int posY)
 	{
 		_posX = posX;
 		_posY = posY;
-
-		_markas = true;
-		//_warnaPion = warnaPion;
-
 		next = NULL;
 		prev = NULL;
-		_Out = 1;
-	}
-
-	bool getmarkas()
-	{
-		return _markas;
 	}
 };
 
@@ -46,9 +34,21 @@ public:
 		size = 0;
 	}
 
-	Node* getHead();
-	Node* getTail();
-	void view();
+	Node* getHead()
+	{
+		return head;
+	}
+
+	Node* getTail()
+	{
+		return tail;
+	}
+
+	void view()
+	{
+
+	}
+
 	void add(int posX, int posY)
 	{
 		Node* temp = new Node(posX, posY);

@@ -235,11 +235,37 @@ void GameState::Init(sf::RenderWindow& _window)
 	 _mapWarna[3].add(282, 207);
 	 _mapWarna[3].add(282, 245);
 
-
-	 _giliran = 0;
-
 	 _turnFix = _turn[_giliran];
+
+	//pion dimarkas semua
+	 for (int i = 0; i < 4; i++)
+	 {
+		 for (int j = 0; j < 4; j++)
+		 {
+			 diMarkas[i][j] = true;
+		 }
+	 }
 }	
+
+void GameState::setNext(Node* pos, int _warna, int _pionKe, bool markas[4][4])
+{
+	if (markas[_warna][_pionKe] == false)
+	{
+		pos = pos->next;
+		_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f(pos->_posX, pos->_posY));
+	}
+	else
+	{
+		pos = _entry[_warna];
+		_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f(pos->_posX, pos->_posY));
+		setdiMarkas(false, _warna, _pionKe);
+	}
+}
+
+void GameState::setdiMarkas(bool n, int i, int j)
+{
+	diMarkas[i][j] = n;
+}
 
 void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
 {
@@ -252,35 +278,19 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 		sf::Vector2i MousePos(sf::Mouse::getPosition(_window));
 
-		/*if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			std::cout << MousePos.x <<","<< MousePos.y << std::endl;
-		}*/
-		bool ispressed = false;
 		if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 		{
 			_rollButton.setFillColor(sf::Color::Yellow);
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !(ispressed))
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				ispressed = true;
-				std::cout << "Click" << std::endl;
 				_move = rand() % 6 + 1;
 				_dice.setTexture(&_diceHead[_move - 1]);
-				if (_giliran == 0 && ispressed)
+				
+				if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 				{
-					_pion[0][0] = _entry[0];
-					if (_pion[0][0]->getmarkas())
-					{
-						_pionSprite[0][0].setPosition(sf::Vector2f(_entry[0]->_posX, _entry[0]->_posY));
-						_pion[0][0]->_markas = false;
-					}
-					ispressed = false;
-					std::cout << "green" << std::endl;
+					setNext(_pion[_giliran][1], _giliran, 1, diMarkas);
 				}
-				if (_move != 6)
-				{
-					_giliran++;
-				}
+				
 				if (_giliran > 3)
 				{
 					_giliran = 0;
@@ -288,6 +298,11 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 				std::cout << _giliran << std::endl;
 
 				_turnFix = _turn[_giliran];
+
+				if (_move != 6)
+				{
+					_giliran++;
+				}
 			}
 		}
 			

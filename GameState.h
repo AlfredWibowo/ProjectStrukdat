@@ -30,6 +30,11 @@ private:
 	int _giliran = 0;
 	int _move;
 
+	bool diMarkas[4][4];
 
+public://fungsi
+	void setNext(Node* pos, int _warna, int _pionKe, bool markas[4][4]);
+
+	void setdiMarkas(bool n, int i, int j);
 };
 
