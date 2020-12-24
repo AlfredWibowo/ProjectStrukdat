@@ -67,7 +67,6 @@ void MainMenuState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vec
 			_playButton.setFillColor(sf::Color::Yellow);
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				std::cout << "Click" << std::endl;
 				_state.push_back(new GameState);
 				_state.back()->Init(_window);
 			}
@@ -82,7 +81,6 @@ void MainMenuState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vec
 			_tutorialButton.setFillColor(sf::Color::Yellow);
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				std::cout << "Click" << std::endl;
 				_state.push_back(new TutorialState);
 				_state.back()->Init(_window);
 			}
@@ -97,7 +95,6 @@ void MainMenuState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vec
 			_aboutButton.setFillColor(sf::Color::Yellow);
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 			{
-				std::cout << "Click" << std::endl;
 				_state.push_back(new AboutState);
 				_state.back()->Init(_window);
 			}

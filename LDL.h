@@ -10,14 +10,24 @@ public:
 	Node* next;
 	Node* prev;
 	int _Out;
+	bool _markas;
 
 	Node(int posX, int posY)
 	{
 		_posX = posX;
 		_posY = posY;
+
+		_markas = true;
+		//_warnaPion = warnaPion;
+
 		next = NULL;
 		prev = NULL;
 		_Out = 1;
+	}
+
+	bool getmarkas()
+	{
+		return _markas;
 	}
 };
 
@@ -36,6 +46,9 @@ public:
 		size = 0;
 	}
 
+	Node* getHead();
+	Node* getTail();
+	void view();
 	void add(int posX, int posY)
 	{
 		Node* temp = new Node(posX, posY);
@@ -50,28 +63,6 @@ public:
 			tail->next = temp;
 			temp->prev = tail;
 			tail = temp;
-
-		}
-	}
-
-	void view()
-	{
-		Node* position = head;
-		for (int i = 0; i < size; i++)
-		{
-			std::cout << "[" << position[i]._posX << "]";
-			position = position->next;
-		}
-		std::cout << std::endl;
-	}
-
-	Node* getHead()
-	{
-		return head;
-	}
-	Node* getTail()
-	{
-		return tail;
-	}
+		};
+	};
 };
-

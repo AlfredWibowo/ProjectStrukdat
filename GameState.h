@@ -23,10 +23,13 @@ private:
 	sf::RectangleShape _bg;
 	LDL _mapLuar;
 	LDL _mapWarna[4];
+
 	Node* _pion[4][4];
 	Node* _entry[4];
 	Node* _exit[4];
 	int _giliran = 0;
 	int _move;
+
+
 };
 
