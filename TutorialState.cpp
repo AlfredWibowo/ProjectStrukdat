@@ -66,7 +66,7 @@ void TutorialState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vec
 
 		else
 		{
-			_backButton.setFillColor(sf::Color::White);
+			_nextButton.setFillColor(sf::Color::White);
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
