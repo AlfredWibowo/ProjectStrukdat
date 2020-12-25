@@ -237,6 +237,7 @@ void GameState::Init(sf::RenderWindow& _window)
 
 	 _turnFix = _turn[_giliran];
 
+
 	//pion dimarkas semua
 	 for (int i = 0; i < 4; i++)
 	 {
@@ -288,7 +289,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 				
 				if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 				{
-					setNext(_pion[_giliran][1], _giliran, 1, diMarkas);
+					setNext(_pion[_giliran][0], _giliran, 0, diMarkas);
 				}
 				
 				if (_giliran > 3)
