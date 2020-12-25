@@ -1,0 +1,13 @@
+tutorial
+
+-Tujuan game ini adalah menjalankan pion agar mencapai tujuan tercepat.
+-Pion dapat dikeluarkan dari markas apabila player mendapat dadu 6 
+-Bila mendapat dadu 6, player dapat mendapat turn 1 kali lagi
+-Terdapat tempat yang menyediakan special skill :
+	1. maju (bisa diri sendiri atau untuk player lain)
+	2. mundur (bisa diri sendiri atau untuk player lain)
+	3. shield
+
+strategi
+
+

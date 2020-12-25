@@ -23,6 +23,18 @@ void TutorialState::Init(sf::RenderWindow& _window)
 	_backButton.setTexture(&_backTexture);
 	_backButton.setSize(sf::Vector2f(250, 100));
 	_backButton.setPosition(sf::Vector2f(1000 - _backButton.getSize().x, 600 - _backButton.getSize().y));
+
+	//bg
+	if (!_bg1Texture.loadFromFile(TUTORIAL1_BG))
+	{
+		std::cout << "Failed to Open File" << std::endl;
+	}
+	if (!_bg2Texture.loadFromFile(TUTORIAL2_BG))
+	{
+		std::cout << "Failed to Open File" << std::endl;
+	}
+	_bg.setTexture(&_bg1Texture);
+	_bg.setSize(sf::Vector2f(1000, 600));
 }
 void TutorialState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
 {
@@ -57,6 +69,7 @@ void TutorialState::Update(sf::RenderWindow& _window, std::vector<State*>& _stat
 void TutorialState::Draw(sf::RenderWindow& _window)
 {
 	_window.clear();
+	_window.draw(_bg);
 	_window.draw(_title);
 	_window.draw(_backButton);
 	_window.display();

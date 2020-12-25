@@ -14,5 +14,7 @@ private:
 	sf::Font _font;
 	sf::RectangleShape _backButton;
 	sf::Texture _backTexture;
+	sf::RectangleShape _bg;
+	sf::Texture _bg1Texture, _bg2Texture;
 };
 
