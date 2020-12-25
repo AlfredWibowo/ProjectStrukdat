@@ -63,6 +63,8 @@ public:
 			tail->next = temp;
 			temp->prev = tail;
 			tail = temp;
-		};
+		}
+		tail->next = head;
+		head->prev = tail;
 	};
 };

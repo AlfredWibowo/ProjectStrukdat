@@ -248,17 +248,26 @@ void GameState::Init(sf::RenderWindow& _window)
 	 }
 }	
 
-void GameState::setNext(Node* pos, int _warna, int _pionKe, bool markas[4][4])
+void GameState::setNext(Node* pos[4][4], int _warna, int _pionKe, bool markas[4][4])
 {
 	if (markas[_warna][_pionKe] == false)
 	{
-		pos = pos->next;
-		_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f(pos->_posX, pos->_posY));
+		if (pos[_warna][_pionKe] == _exit[_warna])
+		{
+			pos[_warna][_pionKe] = _mapWarna[_warna].getHead();
+		}
+		else
+		{
+			pos[_warna][_pionKe] = pos[_warna][_pionKe]->next;
+		}
+		_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f(pos[_warna][_pionKe]->_posX, pos[_warna][_pionKe]->_posY));
+
+
 	}
 	else
 	{
-		pos = _entry[_warna];
-		_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f(pos->_posX, pos->_posY));
+		pos[_warna][_pionKe] = _entry[_warna];
+		_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f(pos[_warna][_pionKe]->_posX, pos[_warna][_pionKe]->_posY));
 		setdiMarkas(false, _warna, _pionKe);
 	}
 }
@@ -279,6 +288,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 		sf::Vector2i MousePos(sf::Mouse::getPosition(_window));
 
+		//baru
 		if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 		{
 			_rollButton.setFillColor(sf::Color::Yellow);
@@ -286,12 +296,14 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 			{
 				_move = rand() % 6 + 1;
 				_dice.setTexture(&_diceHead[_move - 1]);
-				
+			
 				if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 				{
-					setNext(_pion[_giliran][0], _giliran, 0, diMarkas);
+					setNext(_pion, _giliran, 0, diMarkas);
 				}
 				
+				_giliran++;
+
 				if (_giliran > 3)
 				{
 					_giliran = 0;
@@ -300,10 +312,12 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 				_turnFix = _turn[_giliran];
 
-				if (_move != 6)
+				
+
+				/*if (_move != 6)
 				{
-					_giliran++;
-				}
+					
+				}*/
 			}
 		}
 			

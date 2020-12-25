@@ -33,7 +33,7 @@ private:
 	bool diMarkas[4][4];
 
 public://fungsi
-	void setNext(Node* pos, int _warna, int _pionKe, bool markas[4][4]);
+	void setNext(Node* pos[4][4], int _warna, int _pionKe, bool markas[4][4]);
 
 	void setdiMarkas(bool n, int i, int j);
 };
