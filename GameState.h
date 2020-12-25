@@ -1,6 +1,7 @@
 #pragma once
 #include "MainMenuState.h"
 #include "LDL.h"
+#include <Windows.h>
 
 class GameState :public State
 {
