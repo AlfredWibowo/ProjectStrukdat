@@ -7,6 +7,7 @@
 #define TUTORIAL_BUTTON "image/tutorial button.png"
 #define BACK_BUTTON "image/back button.png"
 #define NEXT_BUTTON "image/next button.png"
+#define PREV_BUTTON "image/prev button.png"
 #define QUIT_BUTTON "image/quit button.png"
 #define DICE_ONE "image/one.png"
 #define DICE_TWO "image/two.png"
@@ -24,3 +25,6 @@
 #define TUTORIAL2_BG "image/tutorial2 bg.png"
 #define GAME_BG "image/game bg.png"
 #define FONT "font/Embryotic.ttf"
+
+#define WIDTH 1100
+#define HEIGHT 750

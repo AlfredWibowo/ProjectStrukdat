@@ -12,9 +12,10 @@ public:
 private:
 	sf::Text _title;
 	sf::Font _font;
-	sf::RectangleShape _backButton, _nextButton;
-	sf::Texture _backTexture, _nextTexture;
+	sf::RectangleShape _backButton, _nextButton, _prevButton;
+	sf::Texture _backTexture, _nextTexture, _prevTexture;
 	sf::RectangleShape _bg;
 	sf::Texture _bg1Texture, _bg2Texture;
+	int page = 1;
 };
 

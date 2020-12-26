@@ -8,7 +8,7 @@
 int main()
 {
 	srand(time(NULL));
-	sf::RenderWindow _window(sf::VideoMode(1000, 600), "Ludo Menu", sf::Style::Close);
+	sf::RenderWindow _window(sf::VideoMode(WIDTH, HEIGHT), "Ludo Menu", sf::Style::Close);
 	std::vector<State*> _state;
 	_state.push_back(new MainMenuState);
 	_state.back()->Init(_window);

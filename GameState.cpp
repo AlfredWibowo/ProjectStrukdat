@@ -12,7 +12,7 @@ void GameState::Init(sf::RenderWindow& _window)
 	}
 	_rollButton.setTexture(&_rollTexture);
 	_rollButton.setSize(sf::Vector2f(250, 100));
-	_rollButton.setPosition(sf::Vector2f(1000 - _rollButton.getSize().x - 50, 600 - _rollButton.getSize().y));
+	_rollButton.setPosition(sf::Vector2f(HEIGHT / 4, HEIGHT - _rollButton.getSize().y - 20));
 
 
 	//dice
@@ -105,7 +105,7 @@ void GameState::Init(sf::RenderWindow& _window)
 
 	//background
 	_bg.setFillColor(sf::Color::Cyan);
-	_bg.setSize(sf::Vector2f(1000, 600));
+	_bg.setSize(sf::Vector2f(WIDTH, HEIGHT));
 
 	//LDL
 	//map luar (kiri -> kanan)

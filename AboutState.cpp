@@ -22,7 +22,7 @@ void AboutState::Init(sf::RenderWindow& _window)
 	}
 	_backButton.setTexture(&_backTexture);
 	_backButton.setSize(sf::Vector2f(250, 100));
-	_backButton.setPosition(sf::Vector2f(1000 - _backButton.getSize().x, 600 - _backButton.getSize().y));
+	_backButton.setPosition(sf::Vector2f(WIDTH - _backButton.getSize().x - 5, HEIGHT - _backButton.getSize().y - 5));
 
 	//background
 	if (!_bgTexture.loadFromFile(ABOUT_BG))
@@ -30,7 +30,7 @@ void AboutState::Init(sf::RenderWindow& _window)
 		std::cout << "Failed to Open File" << std::endl;
 	}
 	_bg.setTexture(&_bgTexture);
-	_bg.setSize(sf::Vector2f(1000, 600));
+	_bg.setSize(sf::Vector2f(WIDTH, HEIGHT));
 }
 
 void AboutState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)

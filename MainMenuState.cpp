@@ -17,13 +17,22 @@ void MainMenuState::Init(sf::RenderWindow& _window)
 
 
 	//button
-	sf::Vector2f buttonSize(400, 100);
+	sf::Vector2f buttonSize(450, 125);
 	_playButton.setSize(buttonSize);
-	_playButton.setOrigin(_playButton.getGlobalBounds().width / 2, _playButton.getGlobalBounds().height / 2);
+	_playButton.setOrigin(_playButton.getGlobalBounds().width, _playButton.getGlobalBounds().height / 2);
 	_aboutButton.setSize(buttonSize);
-	_aboutButton.setOrigin(_aboutButton.getGlobalBounds().width / 2, _aboutButton.getGlobalBounds().height / 2);
+	_aboutButton.setOrigin(_aboutButton.getGlobalBounds().width, _aboutButton.getGlobalBounds().height / 2);
 	_tutorialButton.setSize(buttonSize);
-	_tutorialButton.setOrigin(_tutorialButton.getGlobalBounds().width / 2, _tutorialButton.getGlobalBounds().height / 2);
+	_tutorialButton.setOrigin(_tutorialButton.getGlobalBounds().width, _tutorialButton.getGlobalBounds().height / 2);
+	_quitButton.setSize(buttonSize);
+	_quitButton.setOrigin(_quitButton.getGlobalBounds().width, _quitButton.getGlobalBounds().height / 2);
+
+	//position button
+	_playButton.setPosition(sf::Vector2f(WIDTH / 2 + _playButton.getSize().x / 2, HEIGHT / 2 - _playButton.getSize().y));
+	_tutorialButton.setPosition(sf::Vector2f((WIDTH + _tutorialButton.getSize().x) / 2, _playButton.getPosition().y + _tutorialButton.getSize().y + 10));
+	_aboutButton.setPosition(sf::Vector2f((WIDTH + _aboutButton.getSize().x) / 2, _tutorialButton.getPosition().y + _aboutButton.getSize().y + 10));
+	_quitButton.setPosition(sf::Vector2f((WIDTH + _quitButton.getSize().x) / 2, _aboutButton.getPosition().y + _quitButton.getSize().y + 10));
+
 
 
 	//texture
@@ -45,11 +54,13 @@ void MainMenuState::Init(sf::RenderWindow& _window)
 	}
 	_aboutButton.setTexture(&_aboutTexture);
 
-	//position button
+	if (!_quitTexture.loadFromFile(QUIT_BUTTON))
+	{
+		std::cout << "Failed to Open File" << std::endl;
+	}
+	_quitButton.setTexture(&_quitTexture);
 
-	_playButton.setPosition(sf::Vector2f(_window.getSize().x/2, 600/3));
-	_tutorialButton.setPosition(sf::Vector2f(_window.getSize().x / 2, 600/3 + buttonSize.y + 20));
-	_aboutButton.setPosition(sf::Vector2f(_window.getSize().x / 2, 600 / 3 + (2 * buttonSize.y) + 50));
+	
 
 }
 void MainMenuState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
@@ -103,6 +114,19 @@ void MainMenuState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vec
 		{
 			_aboutButton.setFillColor(sf::Color::White);
 		}
+
+		if (_quitButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
+		{
+			_quitButton.setFillColor(sf::Color::Yellow);
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+			{
+				_window.close();
+			}
+		}
+		else
+		{
+			_quitButton.setFillColor(sf::Color::White);
+		}
 	}
 }
 void MainMenuState::Update(sf::RenderWindow& _window, std::vector<State*>& _state)
@@ -117,5 +141,6 @@ void MainMenuState::Draw(sf::RenderWindow& _window)
 	_window.draw(_playButton);
 	_window.draw(_tutorialButton);
 	_window.draw(_aboutButton);
+	_window.draw(_quitButton);
 	_window.display();
 }
