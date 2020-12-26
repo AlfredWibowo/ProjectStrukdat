@@ -349,7 +349,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 
 					//cek pion udah keluar belum kalo dadu bukan 6
-					if (_move != 6 && cek_jumlah_pion_diluar(diMarkas,_giliran))
+					if (_move != 6)
 					{
 						for (int b = 0; b < 4; b++)
 						{
