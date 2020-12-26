@@ -252,11 +252,6 @@ void GameState::Init(sf::RenderWindow& _window)
 
 void GameState::setNext(Node* pos[4][4], int _warna, int _pionKe, bool markas[4][4])
 {
-	/*if (_pion[0][0] == _exit[0])
-	{
-		_pion[0][0] = _mapWarna[0].getHead();
-		break;0
-	}*/
 	if (markas[_warna][_pionKe] == false)
 	{
 		if (pos[_warna][_pionKe] == _exit[_warna])
@@ -284,6 +279,33 @@ void GameState::setdiMarkas(bool n, int i, int j)
 	diMarkas[i][j] = n;
 }
 
+int cek_jumlah_pion_diluar(bool pion[4][4], int giliran)
+{
+	int jumlah_pion_diluar = 0;
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (pion[giliran][i] == false)
+		{
+			jumlah_pion_diluar++;
+		}
+	}
+	return jumlah_pion_diluar;
+}
+
+int pion_yg_diluar(bool pion[4][4], int giliran)
+{
+	int jumlah_pion_diluar = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		if (pion[giliran][i] == false)
+		{
+			jumlah_pion_diluar++;
+		}
+	}
+	return jumlah_pion_diluar;
+}
+
 void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
 {
 	while (_window.pollEvent(_event))
@@ -294,17 +316,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 		}
 
 		sf::Vector2i MousePos(sf::Mouse::getPosition(_window));
-		/*for (int a = 0; a < 4; a++)
-		{
-			if (_pionSprite[0][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
-			{
-				_pionSprite[0][a].setColor(sf::Color::Red);
-			}
-			else
-			{
-				_pionSprite[0][a].setColor(sf::Color::White);
-			}
-		}*/
+		
 		if (mode == 0)
 		{
 			if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
@@ -318,74 +330,6 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					_dice.setTexture(&_diceHead[_move - 1]);
 					_rollButton.setFillColor(sf::Color::White);
 					mode = 1;
-					/*if (_giliran == 0)
-					{
-						if (_pion[0][0]->getmarkas())
-						{
-							for (int a = 0; a < _move; a++)
-							{
-								_pionSprite[0][0].setPosition(sf::Vector2f(_pion[0][0]->_posX, _pion[0][0]->_posY));
-								_pion[0][0] = _pion[0][0]->next;
-							}
-							_pion[0][0]->_markas = false;
-						}
-						else
-						{
-							for (int a = 0; a < 1 && _pion[0][0]->_finish == false; a++)
-							{
-								if (_pion[0][0] == _mapWarna[0].getTail())
-								{
-									_pion[0][0]->_finish == true;
-									break;
-								}
-								if (!(_pion[0][0]->_finish))
-								{
-									_pionSprite[0][0].setPosition(sf::Vector2f(_pion[0][0]->_posX, _pion[0][0]->_posY));
-									if (_pion[0][0] == _exit[0])
-									{
-										_pion[0][0] = _mapWarna[0].getHead();
-										break;
-									}
-									if (_pion[0][0] == _mapWarna[0].getTail())
-									{
-										_pion[0][0]->_finish == true;
-										break;
-									}
-									_pion[0][0] = _pion[0][0]->next;
-
-								}
-							}
-							_pion[0][0]->_markas = false;
-						}
-					}*/
-
-					//if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)) && mode)
-					//{
-					//	_rollButton.setFillColor(sf::Color::Yellow);
-					//	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-					//	{
-					//		_move = rand() % 6 + 1;
-					//		_dice.setTexture(&_diceHead[_move - 1]);
-
-					//		if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
-					//		{
-					//			setNext(_pion, _giliran, 0, diMarkas);
-					//		}
-					//		_giliran++;
-
-					//		if (_giliran > 3)
-					//		{
-					//			_giliran = 0;
-					//		}
-					//		std::cout << _giliran << std::endl;
-
-					//		_turnFix = _turn[_giliran];
-
-					//		/*if (_move != 6)
-					//		{
-					//			_giliran++;
-					//		}*/
-					//	}
 				}
 			}
 			else
@@ -402,7 +346,10 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 				if (_pionSprite[_giliran][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 				{
 					_pionSprite[_giliran][a].setColor(sf::Color::Magenta);
-					if (_move != 6)
+
+
+					//cek pion udah keluar belum kalo dadu bukan 6
+					if (_move != 6 && cek_jumlah_pion_diluar(diMarkas,_giliran))
 					{
 						for (int b = 0; b < 4; b++)
 						{
@@ -412,10 +359,14 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 							}
 						}
 					}
+
+					//kalau 6 keluar
 					if (_move == 6)
 					{
 						isout = true;
 					}
+
+					//action klo pion udah keluar
 					if (isout)
 					{
 						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
