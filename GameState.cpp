@@ -310,8 +310,9 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 				_rollButton.setFillColor(sf::Color::Yellow);
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					_move = rand() % 6 + 1;
-					_move = 6;
+					/*_move = rand() % 6 + 1;*/
+					_move = 0;
+					std::cin >> _move;
 					_dice.setTexture(&_diceHead[_move - 1]);
 					_rollButton.setFillColor(sf::Color::White);
 					mode = 1;
