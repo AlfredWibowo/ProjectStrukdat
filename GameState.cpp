@@ -279,10 +279,9 @@ void GameState::setdiMarkas(bool n, int i, int j)
 	diMarkas[i][j] = n;
 }
 
-int cek_jumlah_pion_diluar(bool pion[4][4], int giliran)
+int jumlah_pion_yg_diluar(bool pion[4][4], int giliran)
 {
 	int jumlah_pion_diluar = 0;
-
 	for (int i = 0; i < 4; i++)
 	{
 		if (pion[giliran][i] == false)
@@ -295,15 +294,14 @@ int cek_jumlah_pion_diluar(bool pion[4][4], int giliran)
 
 int pion_yg_diluar(bool pion[4][4], int giliran)
 {
-	int jumlah_pion_diluar = 0;
 	for (int i = 0; i < 4; i++)
 	{
 		if (pion[giliran][i] == false)
 		{
-			jumlah_pion_diluar++;
+			return i;
 		}
 	}
-	return jumlah_pion_diluar;
+	return -1;
 }
 
 void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
@@ -351,12 +349,23 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					//cek pion udah keluar belum kalo dadu bukan 6
 					if (_move != 6)
 					{
-						for (int b = 0; b < 4; b++)
+						if (_move != 6 && jumlah_pion_yg_diluar(diMarkas, _giliran) <= 1)
 						{
-							if (diMarkas[_giliran][b])
+							if (jumlah_pion_yg_diluar(diMarkas, _giliran) == 1)
 							{
-								isout = true;
+								int pion_ke = pion_yg_diluar(diMarkas, _giliran);
+								for (int i = 0; i < _move; i++)
+								{
+									setNext(_pion, _giliran, pion_ke, diMarkas);
+									Draw(_window);
+									Sleep(300);
+								}
+								_pionSprite[_giliran][pion_ke].setColor(sf::Color::White);
 							}
+							_giliran++;
+
+							_turnFix = _turn[_giliran];
+							mode = 0;
 						}
 					}
 
@@ -366,9 +375,14 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 						isout = true;
 					}
 
+					//kalau 
+
+
+
 					//action klo pion udah keluar
 					if (isout)
 					{
+
 						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 						{
 							if (_move != 6)
