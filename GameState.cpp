@@ -70,7 +70,7 @@ void GameState::Init(sf::RenderWindow& _window)
 	{
 		_pionSprite[i][j].setTexture(_pionTexture[i]);
 	}
-	 
+
 	//posisi awal merah
 	_pionSprite[3][0].setPosition(sf::Vector2f(452, 75));
 	_pionSprite[3][1].setPosition(sf::Vector2f(414, 113));
@@ -279,10 +279,9 @@ void GameState::setdiMarkas(bool n, int i, int j)
 	diMarkas[i][j] = n;
 }
 
-int jumlah_pion_diluar(bool pion[4][4], int giliran)
+int jumlah_pion_yg_diluar(bool pion[4][4], int giliran)
 {
 	int jumlah_pion_diluar = 0;
-
 	for (int i = 0; i < 4; i++)
 	{
 		if (pion[giliran][i] == false)
@@ -315,7 +314,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 		}
 
 		sf::Vector2i MousePos(sf::Mouse::getPosition(_window));
-		
+
 		if (mode == 0)
 		{
 			if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
@@ -339,74 +338,164 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 		if (mode == 1)
 		{
-			bool isout;
-			/*if (_move != 6 && jumlah_pion_diluar(diMarkas, _giliran) <= 1)
+			bool isout = false;
+			for (int a = 0; a < 4; a++)
 			{
-				if (jumlah_pion_diluar(diMarkas, _giliran) == 1)
+				if (_move != 6)
 				{
-					int pion_ke = pion_yg_diluar(diMarkas, _giliran);
-					for (int i = 0; i < _move; i++)
+					if (_move != 6 && jumlah_pion_yg_diluar(diMarkas, _giliran) <= 1)
 					{
-						setNext(_pion, _giliran, pion_ke, diMarkas);
-						Draw(_window);
-						Sleep(300);
-					}
-					_pionSprite[_giliran][pion_ke].setColor(sf::Color::White);
-
-				}
-				_giliran++;
-				
-				if (_giliran > 3) {
-					_giliran = 0;
-				}
-				_turnFix = _turn[_giliran];
-				mode = 0;
-			}*/
-			/*else {*/
-				for (int a = 0; a < 4; a++)
-				{
-					if (_pionSprite[_giliran][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
-					{
-						_pionSprite[_giliran][a].setColor(sf::Color::Magenta);
-
-
-						//cek pion udah keluar belum kalo dadu bukan 6
-						if (_move != 6)
+						if (jumlah_pion_yg_diluar(diMarkas, _giliran) == 1)
 						{
+							int pion_ke = pion_yg_diluar(diMarkas, _giliran);
+							for (int i = 0; i < _move; i++)
+							{
+								setNext(_pion, _giliran, pion_ke, diMarkas);
+								Draw(_window);
+								Sleep(300);
+							}
+							_pionSprite[_giliran][pion_ke].setColor(sf::Color::White);
+
 							for (int b = 0; b < 4; b++)
 							{
-								if (diMarkas[_giliran][b])
+								if (b != _giliran)
 								{
-									isout = true;
-								}
-							}
-						}
-
-						//kalau 6 keluar
-						if (_move == 6)
-						{
-							isout = true;
-						}
-
-						//action klo pion udah keluar
-						if (isout)
-						{
-							if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-							{
-								if (_move != 6)
-								{
-									if (isout && !(diMarkas[_giliran][a]))
+									for (int c = 0; c < 4; c++)
 									{
-										for (int b = 0; b < _move; b++)
+										//cek posisi semua pion _giliran ada yg sama sama _giliran lain
+										if (_pion[_giliran][pion_ke] == _pion[b][c]) //b = selain _giliran
 										{
-											setNext(_pion, _giliran, a, diMarkas);
-											Draw(_window);
-											Sleep(300);
-											_pionSprite[_giliran][a].setColor(sf::Color::White);
+											//setdiMarkas(true, _giliran, c);
+											//set posisi pion di tempat awal
+											if (!diMarkas[b][c])
+											{
+												std::cout << "ada yg posisi sama dengan pion giliran " << _giliran << " pion " << c << std::endl;
+												/*diMarkas[_giliran][a] == true;*/
+												setdiMarkas(true, b, c);
+												//hijau
+												if (b == 0)
+												{
+													if (c == 0)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(113, 75));
+
+													}
+													else if (c == 1)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(75, 113));
+													}
+													else if (c == 2)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(113, 151));
+													}
+													else if (c == 3)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(151, 113));
+													}
+												}
+												//kuning
+												else if (b == 1)
+												{
+													if (c == 0)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(113, 414));
+													}
+													else if (c == 1)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(75, 452));
+													}
+													else if (c == 2)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(113, 490));
+													}
+													else if (c == 3)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(151, 452));
+													}
+												}
+												//biru
+												else if (b == 2)
+												{
+													if (c == 0)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(452, 414));
+													}
+													else if (c == 1)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(414, 452));
+													}
+													else if (c == 2)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(452, 490));
+
+													}
+													else if (c == 3)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(490, 452));
+													}
+												}
+												//merah
+												else if (b == 3)
+												{
+													if (c == 0)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(452, 75));
+
+													}
+													else if (c == 1)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(414, 113));
+													}
+													else if (c == 2)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(452, 151));
+													}
+													else if (c == 3)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(490, 113));
+													}
+												}
+											}
 										}
 									}
 								}
-								else
+							}
+							_giliran++;
+							if (_giliran > 3)
+							{
+								_giliran = 0;
+							}
+							_turnFix = _turn[_giliran];
+							mode = 0;
+						}
+
+					}
+				}
+				if (_pionSprite[_giliran][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
+				{
+					_pionSprite[_giliran][a].setColor(sf::Color::Magenta);
+					//cek pion udah keluar belum kalo dadu bukan 6
+
+
+					//kalau 6 keluar
+					if (_move == 6)
+					{
+						isout = true;
+					}
+
+					//kalau 
+
+
+
+					//action klo pion udah keluar
+					if (isout)
+					{
+
+						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+						{
+							if (_move != 6)
+							{
+								if (isout && !(diMarkas[_giliran][a]))
 								{
 									for (int b = 0; b < _move; b++)
 									{
@@ -416,136 +505,144 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 										_pionSprite[_giliran][a].setColor(sf::Color::White);
 									}
 								}
-								
-								for (int b = 0; b < 4; b++)
+							}
+							else
+							{
+								for (int b = 0; b < _move; b++)
 								{
-									if (b != _giliran)
+									setNext(_pion, _giliran, a, diMarkas);
+									Draw(_window);
+									Sleep(300);
+									_pionSprite[_giliran][a].setColor(sf::Color::White);
+								}
+							}
+
+							for (int b = 0; b < 4; b++)
+							{
+								if (b != _giliran)
+								{
+									for (int c = 0; c < 4; c++)
 									{
-										for (int c = 0; c < 4; c++)
+										//cek posisi semua pion _giliran ada yg sama sama _giliran lain
+										if (_pion[_giliran][a] == _pion[b][c]) //b = selain _giliran
 										{
-											//cek posisi semua pion _giliran ada yg sama sama _giliran lain
-											if (_pion[_giliran][a] == _pion[b][c]) //b = selain _giliran
+											//setdiMarkas(true, _giliran, c);
+											//set posisi pion di tempat awal
+											if (!diMarkas[b][c])
 											{
-												std::cout << "LALALA";
-												//setdiMarkas(true, _giliran, c);
-												//set posisi pion di tempat awal
-												if (!diMarkas[b][c])
+												std::cout << "ada yg posisi sama dengan pion giliran " << _giliran << " pion " << c << std::endl;
+												/*diMarkas[_giliran][a] == true;*/
+												setdiMarkas(true, b, c);
+												//hijau
+												if (b == 0)
 												{
-													std::cout << "ada yg posisi sama dengan pion giliran " << _giliran << " pion " << c << std::endl;
-													/*diMarkas[_giliran][a] == true;*/
-													setdiMarkas(true, b, c);
-													//hijau
-													if (b == 0)
+													if (c == 0)
 													{
-														if (c == 0)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(113, 75));
+														_pionSprite[b][c].setPosition(sf::Vector2f(113, 75));
 
-														}
-														else if (c == 1)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(75, 113));
-														}
-														else if (c == 2)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(113, 151));
-														}
-														else if (c == 3)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(151, 113));
-														}
 													}
-													//kuning
-													else if (b == 1)
+													else if (c == 1)
 													{
-														if (c == 0)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(113, 414));
-														}
-														else if (c == 1)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(75, 452));
-														}
-														else if (c == 2)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(113, 490));
-														}
-														else if (c == 3)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(151, 452));
-														}
+														_pionSprite[b][c].setPosition(sf::Vector2f(75, 113));
 													}
-													//biru
-													else if (b == 2)
+													else if (c == 2)
 													{
-														if (c == 0)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(452, 414));
-														}
-														else if (c == 1)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(414, 452));
-														}
-														else if (c == 2)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(452, 490));
+														_pionSprite[b][c].setPosition(sf::Vector2f(113, 151));
+													}
+													else if (c == 3)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(151, 113));
+													}
+												}
+												//kuning
+												else if (b == 1)
+												{
+													if (c == 0)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(113, 414));
+													}
+													else if (c == 1)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(75, 452));
+													}
+													else if (c == 2)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(113, 490));
+													}
+													else if (c == 3)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(151, 452));
+													}
+												}
+												//biru
+												else if (b == 2)
+												{
+													if (c == 0)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(452, 414));
+													}
+													else if (c == 1)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(414, 452));
+													}
+													else if (c == 2)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(452, 490));
 
-														}
-														else if (c == 3)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(490, 452));
-														}
 													}
-													//merah
-													else if (b == 3)
+													else if (c == 3)
 													{
-														if (c == 0)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(452, 75));
+														_pionSprite[b][c].setPosition(sf::Vector2f(490, 452));
+													}
+												}
+												//merah
+												else if (b == 3)
+												{
+													if (c == 0)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(452, 75));
 
-														}
-														else if (c == 1)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(414, 113));
-														}
-														else if (c == 2)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(452, 151));
-														}
-														else if (c == 3)
-														{
-															_pionSprite[b][c].setPosition(sf::Vector2f(490, 113));
-														}
+													}
+													else if (c == 1)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(414, 113));
+													}
+													else if (c == 2)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(452, 151));
+													}
+													else if (c == 3)
+													{
+														_pionSprite[b][c].setPosition(sf::Vector2f(490, 113));
 													}
 												}
 											}
 										}
 									}
 								}
-
-								if (_move != 6)
-								{
-									_giliran++;
-								}
-								if (_giliran > 3)
-								{
-									_giliran = 0;
-								}
-
-								_turnFix = _turn[_giliran];
-								mode = 0;
-
 							}
 
+							if (_move != 6)
+							{
+								_giliran++;
+							}
+							if (_giliran > 3)
+							{
+								_giliran = 0;
+							}
+
+							_turnFix = _turn[_giliran];
+							mode = 0;
+
 						}
-					}
-					else
-					{
-						_pionSprite[_giliran][a].setColor(sf::Color::White);
+
 					}
 				}
-			//}
-			
+				else
+				{
+					_pionSprite[_giliran][a].setColor(sf::Color::White);
+				}
+			}
 
 		}
 
@@ -581,5 +678,4 @@ void GameState::Draw(sf::RenderWindow& _window)
 	_window.draw(_turnFix);
 	_window.draw(_dice);
 	_window.display();
-
 }
