@@ -25,6 +25,10 @@ private:
 	LDL _mapLuar;
 	LDL _mapWarna[4];
 
+	Node* _specialSkill[4];
+	sf::Text _nameSkill[4];
+	bool _onSpecialSpot = false;
+
 	Node* _pion[4][4];
 	Node* _entry[4];
 	Node* _exit[4];
@@ -37,6 +41,8 @@ private:
 public://fungsi
 	void setNext(Node* pos[4][4], int _warna, int _pionKe, bool markas[4][4]);
 
+	void setBack(Node* pos[4][4], int _warna, int _pionKe, bool markas[4][4]);
+
 	void setdiMarkas(bool n, int i, int j);
 
 	int jumlah_pion_yg_diluar(bool pion[4][4], int giliran);
@@ -44,5 +50,8 @@ public://fungsi
 	int pion_yg_diluar(bool pion[4][4], int giliran);
 
 	void collision(int giliran, int pion_ke);
-};
 
+	bool cek_di_mapWarna(Node* pos[4][4], int _warna, int pion_ke);
+
+	int jumlah_langkah_keTail(Node* pos[4][4], int _warna, int _pionKe);
+};
