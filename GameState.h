@@ -38,5 +38,11 @@ public://fungsi
 	void setNext(Node* pos[4][4], int _warna, int _pionKe, bool markas[4][4]);
 
 	void setdiMarkas(bool n, int i, int j);
+
+	int jumlah_pion_yg_diluar(bool pion[4][4], int giliran);
+
+	int pion_yg_diluar(bool pion[4][4], int giliran);
+
+	void collision(int giliran, int pion_ke);
 };
 
