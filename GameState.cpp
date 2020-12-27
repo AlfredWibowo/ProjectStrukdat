@@ -498,100 +498,141 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 		if (mode == 1)
 		{
-			bool isout = false;
-			for (int a = 0; a < 4; a++)
+			bool isout;
+
+			if (_move != 6 && jumlah_pion_yg_diluar(diMarkas, _giliran) <= 1)
 			{
-				if (_move != 6)
+				if (jumlah_pion_yg_diluar(diMarkas, _giliran) == 1)
 				{
-					if (_move != 6 && jumlah_pion_yg_diluar(diMarkas, _giliran) <= 1)
+					int pion_ke = pion_yg_diluar(diMarkas, _giliran);
+
+					//klo di map warna
+					if (cek_di_mapWarna(_pion, _giliran, pion_ke) == true)
 					{
-						if (jumlah_pion_yg_diluar(diMarkas, _giliran) == 1)
+						if (_move <= jumlah_langkah_keTail(_pion, _giliran, pion_ke))
 						{
-							int pion_ke = pion_yg_diluar(diMarkas, _giliran);
-
-							//klo di map warna
-							if (cek_di_mapWarna(_pion, _giliran, pion_ke) == true)
+							for (int i = 0; i < _move; i++)
 							{
-								if (_move <= jumlah_langkah_keTail(_pion, _giliran, pion_ke))
-								{
-									for (int i = 0; i < _move; i++)
-									{
-										setNext(_pion, _giliran, pion_ke, diMarkas);
-										Draw(_window);
-										Sleep(300);
-									}
-								}
-								else
-								{
-									int mundur = _move - jumlah_langkah_keTail(_pion, _giliran, pion_ke);
-
-									for (int i = 0; i < _move; i++)
-									{
-										if (i < jumlah_langkah_keTail(_pion, _giliran, pion_ke))
-										{
-											setNext(_pion, _giliran, pion_ke, diMarkas);
-											Draw(_window);
-											Sleep(300);
-										}
-										else
-										{
-											setBack(_pion, _giliran, pion_ke, diMarkas);
-											Draw(_window);
-											Sleep(300);
-										}
-									}
-								}
-							
+								setNext(_pion, _giliran, pion_ke, diMarkas);
+								Draw(_window);
+								Sleep(300);
 							}
-							//klo ga
-							else
+						}
+						else
+						{
+							int mundur = _move - jumlah_langkah_keTail(_pion, _giliran, pion_ke);
+
+							for (int i = 0; i < _move - mundur; i++)
 							{
-								for (int i = 0; i < _move; i++)
-								{
-									setNext(_pion, _giliran, pion_ke, diMarkas);
-									Draw(_window);
-									Sleep(300);
-								}
-								_pionSprite[_giliran][pion_ke].setColor(sf::Color::White);
+								setNext(_pion, _giliran, pion_ke, diMarkas);
+								Draw(_window);
+								Sleep(300);
 							}
-
-							//tabrakan
-							collision(_giliran, pion_ke);
-
-							_giliran++;
-							if (_giliran > 3)
+							for (int i = 0; i < mundur; i++)
 							{
-								_giliran = 0;
+								setBack(_pion, _giliran, pion_ke, diMarkas);
+								Draw(_window);
+								Sleep(300);
 							}
-							_turnFix = _turn[_giliran];
-							mode = 0;
+						}
+						_pionSprite[_giliran][pion_ke].setColor(sf::Color::White);
+
+					}
+					//klo ga
+					else
+					{
+						for (int i = 0; i < _move; i++)
+						{
+							setNext(_pion, _giliran, pion_ke, diMarkas);
+							Draw(_window);
+							Sleep(300);
+						}
+						_pionSprite[_giliran][pion_ke].setColor(sf::Color::White);
+					}
+
+					//tabrakan
+					collision(_giliran, pion_ke);
+
+					_giliran++;
+					if (_giliran > 3)
+					{
+						_giliran = 0;
+					}
+					_turnFix = _turn[_giliran];
+					mode = 0;
+				}
+			}
+
+			else
+			{ 
+				for (int a = 0; a < 4; a++)
+				{
+
+
+					if (_pionSprite[_giliran][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
+					{
+						_pionSprite[_giliran][a].setColor(sf::Color::Magenta);
+
+						if (_move != 6)
+						{
+							for (int b = 0; b < 4; b++)
+							{
+								if (diMarkas[_giliran][b])
+								{
+									isout = true;
+								}
+							}
 						}
 
-					}
-				}
-				if (_pionSprite[_giliran][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
-				{
-					_pionSprite[_giliran][a].setColor(sf::Color::Magenta);
-
-					//kalau 6 keluar
-					if (_move == 6)
-					{
-						isout = true;
-					}
-
-					//action klo pion udah keluar
-					if (isout)
-					{
-						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+						//kalau 6 keluar
+						if (_move == 6)
 						{
-							if (_move != 6)
+							isout = true;
+						}
+
+						//action klo pion udah keluar
+						if (isout)
+						{
+							if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 							{
-								if (isout && !(diMarkas[_giliran][a]))
+								if (_move != 6)
 								{
-									//klo di map warna
-									if (cek_di_mapWarna(_pion, _giliran, a) == true)
+									if (isout && !(diMarkas[_giliran][a]))
 									{
-										if (_move <= jumlah_langkah_keTail(_pion, _giliran, a))
+										//klo di map warna
+										if (cek_di_mapWarna(_pion, _giliran, a) == true)
+										{
+											if (_move <= jumlah_langkah_keTail(_pion, _giliran, a))
+											{
+												for (int i = 0; i < _move; i++)
+												{
+													setNext(_pion, _giliran, a, diMarkas);
+													Draw(_window);
+													Sleep(300);
+												}
+											}
+											else
+											{
+												int mundur = _move - jumlah_langkah_keTail(_pion, _giliran, a);
+
+												for (int i = 0; i < _move - mundur; i++)
+												{
+													setNext(_pion, _giliran, a, diMarkas);
+													Draw(_window);
+													Sleep(300);
+												}
+												for (int i = 0; i < mundur; i++)
+												{
+													setBack(_pion, _giliran, a, diMarkas);
+													Draw(_window);
+													Sleep(300);
+												}
+											}
+											_pionSprite[_giliran][a].setColor(sf::Color::White);
+
+										}
+										//klo ga
+										else
 										{
 											for (int i = 0; i < _move; i++)
 											{
@@ -599,75 +640,44 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 												Draw(_window);
 												Sleep(300);
 											}
+											_pionSprite[_giliran][a].setColor(sf::Color::White);
 										}
-										else
-										{
-											int mundur = _move - jumlah_langkah_keTail(_pion, _giliran, a);
-
-											for (int i = 0; i < _move; i++)
-											{
-												if (i < jumlah_langkah_keTail(_pion, _giliran, a))
-												{
-													setNext(_pion, _giliran, a, diMarkas);
-													Draw(_window);
-													Sleep(300);
-												}
-												else
-												{
-													setBack(_pion, _giliran, a, diMarkas);
-													Draw(_window);
-													Sleep(300);
-												}
-											}
-										}
-
-									}
-									//klo ga
-									else
-									{
-										for (int i = 0; i < _move; i++)
-										{
-											setNext(_pion, _giliran, a, diMarkas);
-											Draw(_window);
-											Sleep(300);
-										}
-										_pionSprite[_giliran][a].setColor(sf::Color::White);
 									}
 								}
-							}
-							else
-							{
-								for (int b = 0; b < _move; b++)
+								else
 								{
-									setNext(_pion, _giliran, a, diMarkas);
-									Draw(_window);
-									Sleep(300);
+									for (int b = 0; b < _move; b++)
+									{
+										setNext(_pion, _giliran, a, diMarkas);
+										Draw(_window);
+										Sleep(300);
+									}
 									_pionSprite[_giliran][a].setColor(sf::Color::White);
 								}
-							}
 
-							//tabrakan
-							collision(_giliran, a);
+								//tabrakan
+								collision(_giliran, a);
 
-							if (_move != 6)
-							{
-								_giliran++;
-							}
-							if (_giliran > 3)
-							{
-								_giliran = 0;
-							}
+								if (_move != 6)
+								{
+									_giliran++;
+								}
+								if (_giliran > 3)
+								{
+									_giliran = 0;
+								}
 
-							_turnFix = _turn[_giliran];
-							mode = 0;
+								_turnFix = _turn[_giliran];
+								mode = 0;
+
+							}
 
 						}
-
 					}
-				}
-				else
-				{
-					_pionSprite[_giliran][a].setColor(sf::Color::White);
+					else
+					{
+						_pionSprite[_giliran][a].setColor(sf::Color::White);
+					}
 				}
 			}
 		}
@@ -680,7 +690,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 		}
 	}
 	_window.clear();
-};
+}
 
 void GameState::Update(sf::RenderWindow& _window, std::vector<State*>& _state)
 {
