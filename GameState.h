@@ -38,6 +38,10 @@ private:
 
 	bool diMarkas[4][4];
 
+	int _finish[4];
+
+	int _rank[4];
+
 public://fungsi
 	void setNext(Node* pos[4][4], int _warna, int _pionKe, bool markas[4][4]);
 
@@ -54,4 +58,10 @@ public://fungsi
 	bool cek_di_mapWarna(Node* pos[4][4], int _warna, int pion_ke);
 
 	int jumlah_langkah_keTail(Node* pos[4][4], int _warna, int _pionKe);
+
+	void cek_brp_finish();
+
+	bool udh_finish_semua();
+
+	void cara_curang();
 };

@@ -14,12 +14,12 @@ int main()
 	_state.push_back(new MainMenuState);
 	_state.back()->Init(_window);
 
-	/*sf::SoundBuffer buffer;
+	sf::SoundBuffer buffer;
 	if (!buffer.loadFromFile("soundtrack/sound.wav")) {
 		return -1;
 	}
 
-	sf::Sound sound;
+	/*sf::Sound sound;
 	sound.setBuffer(buffer);
 	sound.play();*/
 		

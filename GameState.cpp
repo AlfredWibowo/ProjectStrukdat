@@ -1,4 +1,5 @@
 #include "GameState.h"
+#include "RankingState.h"
 
 void GameState::Init(sf::RenderWindow& _window)
 {
@@ -256,6 +257,12 @@ void GameState::Init(sf::RenderWindow& _window)
 
 
 	_giliran = 0;
+
+	//cek brp finsih
+	for (int i = 0; i < 4; i++)
+	{
+		_finish[i] = 0;
+	}
 }
 
 bool GameState::cek_di_mapWarna(Node* pos[4][4], int _warna, int pion_ke)
@@ -462,7 +469,31 @@ void GameState::collision(int giliran, int pion_ke)
 	}
 }
 
+void GameState::cek_brp_finish()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			if (_pion[i][j] == _mapWarna[i].getTail())
+			{
+				_finish[i]++;
+			}
+		}
+	}
+}
 
+bool GameState::udh_finish_semua()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		if (_finish[i] != 4)
+		{
+			return false;
+		}
+	}
+	return true;
+}
 
 void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
 {
@@ -471,6 +502,14 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 		if (_event.type == sf::Event::Closed)
 		{
 			_window.close();
+		}
+
+		cek_brp_finish();
+
+		if (udh_finish_semua())
+		{
+			_state.push_back(new RankingState);
+			_state.back()->Init(_window);
 		}
 
 		sf::Vector2i MousePos(sf::Mouse::getPosition(_window));
@@ -545,7 +584,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 					//tabrakan
 					collision(_giliran, pion_ke);
-
+					
 					_giliran++;
 					if (_giliran > 3)
 					{
@@ -578,10 +617,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 						{
 							for (int b = 0; b < 4; b++)
 							{
-								if (diMarkas[_giliran][b])
-								{
-									isout = true;
-								}
+								isout = true;
 							}
 						}
 
@@ -694,6 +730,8 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 				}
 			}
 		}
+
+		
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
