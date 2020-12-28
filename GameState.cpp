@@ -580,6 +580,16 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					_turnFix = _turn[_giliran];
 					mode = 0;
 				}
+				else
+				{
+					_giliran++;
+					if (_giliran > 3)
+					{
+						_giliran = 0;
+					}
+					_turnFix = _turn[_giliran];
+					mode = 0;
+				}
 			}
 
 			else
