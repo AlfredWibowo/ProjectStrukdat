@@ -528,6 +528,10 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								}
 							}
 						}
+						//febri
+						if (_pion[_giliran][pion_ke] == _mapWarna[_giliran].getTail()) {
+							printf("MSK win");
+						}
 						/*if (_move <= jumlah_langkah_keTail(_pion, _giliran, pion_ke))
 						{
 							for (int i = 0; i < _move; i++)
