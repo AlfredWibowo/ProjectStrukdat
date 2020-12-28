@@ -11,7 +11,7 @@ public:
 	void Draw(sf::RenderWindow& _window);
 
 private:
-	sf::Font _font;
+	sf::Font _font, _font2;
 	sf::Text _title;
 	sf::Text _ranking[4];
 	std::string winText[4];

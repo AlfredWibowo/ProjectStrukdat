@@ -25,6 +25,7 @@
 #define TUTORIAL2_BG "image/tutorial2 bg.png"
 #define GAME_BG "image/game bg.png"
 #define FONT "font/Embryotic.ttf"
+#define FONT2 "font/SeasideResortNF.ttf"
 
 #define WIDTH 1100
 #define HEIGHT 750

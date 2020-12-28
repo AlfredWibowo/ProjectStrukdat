@@ -17,10 +17,14 @@ void RankingState::Init(sf::RenderWindow& _window)
 	_title.setPosition(sf::Vector2f(_window.getSize().x / 2 - 60, 20));
 	_title.setCharacterSize(80);
 
+	if (!_font2.loadFromFile(FONT2))
+	{
+		std::cout << "Failed to Open File" << std::endl;
+	}
 
 	for (int i = 0; i < 4; i++)
 	{
-		_ranking[i].setFont(_font);
+		_ranking[i].setFont(_font2);
 		_ranking[i].setOrigin(_title.getGlobalBounds().width, _title.getGlobalBounds().height / 2);
 		_ranking[i].setCharacterSize(60);
 	}
@@ -47,10 +51,10 @@ void RankingState::Init(sf::RenderWindow& _window)
 	}
 	_file.close();
 
-	_ranking[0].setString("1st: " + winText[rank[0]]);
-	_ranking[1].setString("2nd: " + winText[rank[1]]);
-	_ranking[2].setString("3rd: " + winText[rank[2]]);
-	_ranking[3].setString("4th: " + winText[rank[3]]);
+	_ranking[0].setString("1st: \t" + winText[rank[0]]);
+	_ranking[1].setString("2nd: \t" + winText[rank[1]]);
+	_ranking[2].setString("3rd: \t" + winText[rank[2]]);
+	_ranking[3].setString("4th: \t" + winText[rank[3]]);
 
 }
 void RankingState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
