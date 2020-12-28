@@ -17,5 +17,7 @@ private:
 	sf::Font _font;
 	sf::Text _title;
 	sf::RectangleShape _playButton, _aboutButton, _tutorialButton, _quitButton;
+	sf::RectangleShape _bg;
+	sf::Texture _bgTexture;
 };
 

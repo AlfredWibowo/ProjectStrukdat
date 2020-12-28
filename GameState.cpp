@@ -6,6 +6,14 @@ void GameState::Init(sf::RenderWindow& _window)
 	_window.setTitle("Ludo Game");
 	_window.setFramerateLimit(240);
 
+	//music
+	if (!_music.openFromFile(MUSIC))
+	{
+		std::cout << "failed to open file" << std::endl;
+	}
+	_music.setLoop(true);
+	_music.play();
+
 	//roll button
 	if (!_rollTexture.loadFromFile(ROLL_BUTTON))
 	{
@@ -507,6 +515,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 		{
 			if (_rank.size() == 3)
 			{
+				_music.stop();
 				_rank.push_back(_giliran);
 
 				for (int a = 0; a < _rank.size(); a++)
@@ -528,6 +537,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 				_state.push_back(new RankingState);
 				_state.back()->Init(_window);
+			
 				
 			}
 
@@ -803,8 +813,10 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
 			std::cout << "ESC" << std::endl;
+			_music.stop();
 			_state.push_back(new MainMenuState);
 			_state.back()->Init(_window); 
+			
 		}
 	}
 	_window.clear();

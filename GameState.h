@@ -1,7 +1,7 @@
 #pragma once
 #include "MainMenuState.h"
 #include "LDL.h"
-#include <Windows.h>
+#include <Windows.h>s
 
 class GameState :public State
 {
@@ -22,6 +22,8 @@ private:
 	sf::Text _turn[4];
 	sf::Text _turnFix;
 	sf::RectangleShape _bg;
+	sf::Music _music;
+
 	LDL _mapLuar;
 	LDL _mapWarna[4];
 

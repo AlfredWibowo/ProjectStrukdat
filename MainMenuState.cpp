@@ -4,6 +4,15 @@
 
 void MainMenuState::Init(sf::RenderWindow& _window)
 {
+
+	//bg
+	if (!_bgTexture.loadFromFile(MAP_BG))
+	{
+		std::cout << "failed to open file" << std::endl;
+	}
+	_bg.setTexture(&_bgTexture);
+	_bg.setSize(sf::Vector2f(WIDTH, HEIGHT));
+
 	//title
 	if (!_font.loadFromFile(FONT))
 	{
@@ -137,6 +146,7 @@ void MainMenuState::Update(sf::RenderWindow& _window, std::vector<State*>& _stat
 void MainMenuState::Draw(sf::RenderWindow& _window)
 {
 	_window.clear();
+	_window.draw(_bg);
 	_window.draw(_title);
 	_window.draw(_playButton);
 	_window.draw(_tutorialButton);

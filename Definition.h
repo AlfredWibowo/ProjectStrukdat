@@ -26,6 +26,7 @@
 #define GAME_BG "image/game bg.png"
 #define FONT "font/Embryotic.ttf"
 #define FONT2 "font/SeasideResortNF.ttf"
+#define MUSIC "music/ludo_music.wav"
 
 #define WIDTH 1100
 #define HEIGHT 750
