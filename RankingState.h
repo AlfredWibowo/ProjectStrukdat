@@ -16,6 +16,9 @@ private:
 	sf::Text _ranking[4];
 	std::string winText[4];
 
+	sf::Texture _backTexture;
+	sf::RectangleShape _backButton;
+
 	int rank[4];
 };
 

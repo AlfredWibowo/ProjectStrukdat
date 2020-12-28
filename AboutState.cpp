@@ -69,7 +69,6 @@ void AboutState::Draw(sf::RenderWindow& _window)
 	_window.clear();
 	_window.draw(_bg);
 	_window.draw(_title);
-	//_window.draw(_info);
 	_window.draw(_backButton);
 	_window.display();
 }
