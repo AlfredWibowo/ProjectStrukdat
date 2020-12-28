@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
+#include "Definition.h"
+#include <fstream>
 
 class State
 {

@@ -500,18 +500,36 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 			_window.close();
 		}
 
-		/*cek_brp_finish();
-
-		if (udh_finish_semua())
-		{
-			_state.push_back(new RankingState);
-			_state.back()->Init(_window);
-		}*/
-
 		sf::Vector2i MousePos(sf::Mouse::getPosition(_window));
 
 		if (mode == 0)
 		{
+			if (_rank.size() == 3)
+			{
+				_rank.push_back(_giliran);
+
+				for (int a = 0; a < _rank.size(); a++)
+				{
+					std::cout << _rank[a] << std::endl;
+				}
+
+				std::fstream _file;
+
+				_file.open("Ranking.txt", std::ios::out);
+				if (_file.is_open())
+				{
+					for (int i = 0; i < _rank.size(); i++)
+					{
+						_file << _rank[i] << std::endl;
+					}
+				}
+				_file.close();
+
+				_state.push_back(new RankingState);
+				_state.back()->Init(_window);
+				
+			}
+
 			if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 			{
 				_rollButton.setFillColor(sf::Color::Yellow);
@@ -534,15 +552,8 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 		if (mode == 1)
 		{
-
-			/*cek_brp_finish();
-
-			if (udh_finish_semua())
-			{
-				_state.push_back(new RankingState);
-				_state.back()->Init(_window);
-			}*/
-			if (_move != 6 && jumlah_pion_yg_diluar(diMarkas, _giliran) <= 1)
+			
+			if (_move != 6)
 			{
 				if (jumlah_pion_yg_diluar(diMarkas, _giliran) == 1)
 				{
@@ -605,24 +616,17 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 						_giliran++;
 					}
 					bool finished = false;
-					while (!finished)
+					for (int c = 0; c < _rank.size(); c++)
 					{
-						finished = true;
-						for (int c = 0; c < _rank.size(); c++)
+						if (_giliran == _rank[c])
 						{
-							if (_giliran == _rank[c])
-							{
-								_giliran++;
-								finished = true;
-							}
+							_giliran++;
 						}
 					}
 					if (_giliran > 3)
 					{
 						_giliran = 0;
 					}
-
-					
 				}
 				else
 				{
@@ -630,23 +634,21 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					{
 						_giliran++;
 					}
-					bool finished = false;
-					while (!finished)
+
+					for (int c = 0; c < _rank.size(); c++)
 					{
-						finished = true;
-						for (int c = 0; c < _rank.size(); c++)
+						if (_giliran == _rank[c])
 						{
-							if (_giliran == _rank[c])
-							{
-								_giliran++;
-								finished = false;
-							}
+							_giliran++;
 						}
 					}
 					if (_giliran > 3)
 					{
 						_giliran = 0;
 					}
+
+					_turnFix = _turn[_giliran];
+					mode = 0;
 				}
 
 			}
@@ -756,6 +758,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								std::cout << "Masuk ke vector rank" << std::endl;
 								_rank.push_back(_giliran);
 							}
+							
 
 							if (_move != 6)
 							{
@@ -799,10 +802,6 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
 			std::cout << "ESC" << std::endl;
-			for (int a = 0; a < _rank.size(); a++)
-			{
-				std::cout << _rank[a] << std::endl;
-			}
 			_state.push_back(new MainMenuState);
 			_state.back()->Init(_window); 
 		}

@@ -42,7 +42,7 @@ private:
 	//pionfinish[0][0,1,2,3] -> true ijo menang
 
 	int _finish[4];
-	int _rank[4];
+	std::vector<int> _rank;
 
 public://fungsi
 	void setNext(Node* pos[4][4], int _warna, int _pionKe, bool markas[4][4]);
@@ -61,12 +61,7 @@ public://fungsi
 
 	int jumlah_langkah_keTail(Node* pos[4][4], int _warna, int _pionKe);
 
-	void cek_brp_finish();
+	void add_finish(int giliran, int pionke);
 
 	bool udh_finish_semua();
-
-	int getrank(int index)
-	{
-		return _rank[index];
-	}
 };
