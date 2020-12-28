@@ -470,17 +470,11 @@ void GameState::collision(int giliran, int pion_ke)
 	}
 }
 
-void GameState::cek_brp_finish()
+void GameState::add_finish(int giliran, int pionke)
 {
-	for (int i = 0; i < 4; i++)
+	if (_pion[giliran][pionke] == _mapWarna[giliran].getTail())
 	{
-		for (int j = 0; j < 4; j++)
-		{
-			if (_pion[i][j] == _mapWarna[i].getTail())
-			{
-				_finish[i]++;
-			}
-		}
+		_finish[giliran]++;
 	}
 }
 
@@ -488,12 +482,12 @@ bool GameState::udh_finish_semua()
 {
 	for (int i = 0; i < 4; i++)
 	{
-		if (_finish[i] == 4)
+		if (_finish[i] != 4)
 		{
-			return true;
+			return false;
 		}
 	}
-	return false;
+	return true;
 }
 
 void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
@@ -604,6 +598,13 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					}
 					_turnFix = _turn[_giliran];
 					mode = 0;
+
+					add_finish(_giliran, pion_ke);
+					if (_finish[_giliran] == 4)
+					{
+						std::cout << "Masuk ke vector rank" << std::endl;
+						_rank.push_back(_giliran);
+					}
 				}
 				else
 				{
@@ -615,6 +616,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					_turnFix = _turn[_giliran];
 					mode = 0;
 				}
+
 			}
 
 			else
@@ -626,101 +628,110 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 						_pionSprite[_giliran][a].setColor(sf::Color::Magenta);
 
 						//action klo pion udah keluar
-							if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+						{
+							if (_move != 6)
 							{
-								if (_move != 6)
+								if (!(diMarkas[_giliran][a]))
 								{
-									if (!(diMarkas[_giliran][a]))
-									{
 
-										//klo di map warna
-										//sg baru
-										bool goback = false;
-										if (cek_di_mapWarna(_pion, _giliran, a) == true)
+									//klo di map warna
+									//sg baru
+									bool goback = false;
+									if (cek_di_mapWarna(_pion, _giliran, a) == true)
+									{
+										for (int i = 0; i < _move; i++)
 										{
-											for (int i = 0; i < _move; i++)
+											if (goback)
 											{
-												if (goback)
-												{
-													setBack(_pion, _giliran, a, diMarkas);
-													Draw(_window);
-													Sleep(300);
-												}
-												else
-												{
-													setNext(_pion, _giliran, a, diMarkas);
-													Draw(_window);
-													Sleep(300);
-													if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
-													{
-														goback = true;
-													}
-												}
+												setBack(_pion, _giliran, a, diMarkas);
+												Draw(_window);
+												Sleep(300);
 											}
-											_pionSprite[_giliran][a].setColor(sf::Color::White);
-											if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
-											{
-												pionfinish[_giliran][a] = true;
-											}
-										}
-										//klo ga
-										else
-										{
-											for (int i = 0; i < _move; i++)
+											else
 											{
 												setNext(_pion, _giliran, a, diMarkas);
 												Draw(_window);
 												Sleep(300);
+												if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
+												{
+													goback = true;
+												}
 											}
-											_pionSprite[_giliran][a].setColor(sf::Color::White);
 										}
-
-									}
-								}
-								else
-								{
-									bool goback = false; //klo nyampek finish jdi true
-									for (int i = 0; i < _move; i++)
-									{
-										if (goback)
+										_pionSprite[_giliran][a].setColor(sf::Color::White);
+										if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
 										{
-											setBack(_pion, _giliran, a, diMarkas);
-											Draw(_window);
-											Sleep(300);
+											pionfinish[_giliran][a] = true;
 										}
-										else
+										
+									}
+									//klo ga
+									else
+									{
+										for (int i = 0; i < _move; i++)
 										{
 											setNext(_pion, _giliran, a, diMarkas);
 											Draw(_window);
 											Sleep(300);
-											if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
-											{
-												goback = true;
-											}
 										}
+										_pionSprite[_giliran][a].setColor(sf::Color::White);
+										
 									}
 
-									_pionSprite[_giliran][a].setColor(sf::Color::White);
 								}
-
-								//tabrakan
-								collision(_giliran, a);
-
-								if (_move != 6)
+							}
+							else
+							{
+								bool goback = false; //klo nyampek finish jdi true
+								for (int i = 0; i < _move; i++)
 								{
-									_giliran++;
-								}
-								if (_giliran > 3)
-								{
-									_giliran = 0;
+									if (goback)
+									{
+										setBack(_pion, _giliran, a, diMarkas);
+										Draw(_window);
+										Sleep(300);
+									}
+									else
+									{
+										setNext(_pion, _giliran, a, diMarkas);
+										Draw(_window);
+										Sleep(300);
+										if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
+										{
+											goback = true;
+										}
+									}
 								}
 
-								_turnFix = _turn[_giliran];
-								mode = 0;
 
+								_pionSprite[_giliran][a].setColor(sf::Color::White);
 							}
 
-						/*}*/
+							//tabrakan
+							collision(_giliran, a);
+
+							if (_move != 6)
+							{
+								_giliran++;
+							}
+							if (_giliran > 3)
+							{
+								_giliran = 0;
+							}
+
+							_turnFix = _turn[_giliran];
+							mode = 0;
+
+							add_finish(_giliran, a);
+
+							if (_finish[_giliran] == 4)
+							{
+								std::cout << "Masuk ke vector rank" << std::endl;
+								_rank.push_back(_giliran);
+							}
+
+						}
 					}
 					else
 					{
@@ -740,6 +751,11 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 		}
 	}
 	_window.clear();
+
+	for (int a = 0; a < _rank.size(); a++)
+	{
+		std::cout << _rank[a] << std::endl;
+	}
 }
 
 void GameState::Update(sf::RenderWindow& _window, std::vector<State*>& _state)
