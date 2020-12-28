@@ -90,9 +90,10 @@ void GameState::Init(sf::RenderWindow& _window)
 	for (int i = 0; i < 4; i++)
 	{
 		_turn[i].setFont(_font);
-		_turn[i].setCharacterSize(50);
-		_turn[i].setPosition(sf::Vector2f(650, 25));
+		_turn[i].setCharacterSize(60);
+		_turn[i].setPosition(sf::Vector2f(3.7*_rollButton.getPosition().x, 1/4*HEIGHT));
 	}
+
 
 	_turn[0].setString("GREEN TURN");
 	_turn[1].setString("YELLOW TURN");
