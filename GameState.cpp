@@ -602,6 +602,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 									{
 
 										//klo di map warna
+										//sg baru
 										bool goback = false;
 										if (cek_di_mapWarna(_pion, _giliran, a) == true)
 										{
