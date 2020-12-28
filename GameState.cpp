@@ -317,7 +317,7 @@ void GameState::setNext(Node* pos[4][4], int _warna, int _pionKe, bool markas[4]
 	}
 	else
 	{
-		pos[_warna][_pionKe] = _entry[_warna];
+		pos[_warna][_pionKe] = /*_entry[_warna]*/_mapWarna[_warna].getHead();
 		_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f(pos[_warna][_pionKe]->_posX, pos[_warna][_pionKe]->_posY));
 		setdiMarkas(false, _warna, _pionKe);
 	}
@@ -354,7 +354,7 @@ int GameState::pion_yg_diluar(bool pion[4][4], int giliran)
 {
 	for (int i = 0; i < 4; i++)
 	{
-		if (pion[giliran][i] == false)
+		if (pion[giliran][i] == false && !pionfinish[giliran][i])
 		{
 			return i;
 		}
@@ -475,6 +475,7 @@ void GameState::add_finish(int giliran, int pionke)
 	if (_pion[giliran][pionke] == _mapWarna[giliran].getTail())
 	{
 		_finish[giliran]++;
+		pionfinish[_giliran][pionke] = true;
 	}
 }
 
@@ -521,6 +522,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					std::cin >> _move;
 					_dice.setTexture(&_diceHead[_move - 1]);
 					_rollButton.setFillColor(sf::Color::White);
+					std::cout << _giliran << std::endl;
 					mode = 1;
 				}
 			}
@@ -569,10 +571,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								}
 							}
 						}
-						if (_pion[_giliran][pion_ke] == _mapWarna[_giliran].getTail())
-						{
-							pionfinish[_giliran][pion_ke] = true;
-						}
+						
 						_pionSprite[_giliran][pion_ke].setColor(sf::Color::White);
 
 					}
@@ -590,31 +589,64 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 					//tabrakan
 					collision(_giliran, pion_ke);
-
-					_giliran++;
-					if (_giliran > 3)
-					{
-						_giliran = 0;
-					}
-					_turnFix = _turn[_giliran];
-					mode = 0;
-
 					add_finish(_giliran, pion_ke);
+					/*if (_pion[_giliran][pion_ke] == _mapWarna[_giliran].getTail())
+					{
+						pionfinish[_giliran][pion_ke] = true;
+					}*/
 					if (_finish[_giliran] == 4)
 					{
 						std::cout << "Masuk ke vector rank" << std::endl;
 						_rank.push_back(_giliran);
 					}
-				}
-				else
-				{
-					_giliran++;
+
+					if (_move != 6)
+					{
+						_giliran++;
+					}
+					bool finished = false;
+					while (!finished)
+					{
+						finished = true;
+						for (int c = 0; c < _rank.size(); c++)
+						{
+							if (_giliran == _rank[c])
+							{
+								_giliran++;
+								finished = true;
+							}
+						}
+					}
 					if (_giliran > 3)
 					{
 						_giliran = 0;
 					}
-					_turnFix = _turn[_giliran];
-					mode = 0;
+
+					
+				}
+				else
+				{
+					if (_move != 6)
+					{
+						_giliran++;
+					}
+					bool finished = false;
+					while (!finished)
+					{
+						finished = true;
+						for (int c = 0; c < _rank.size(); c++)
+						{
+							if (_giliran == _rank[c])
+							{
+								_giliran++;
+								finished = false;
+							}
+						}
+					}
+					if (_giliran > 3)
+					{
+						_giliran = 0;
+					}
 				}
 
 			}
@@ -675,6 +707,10 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 											Draw(_window);
 											Sleep(300);
 										}
+										if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
+										{
+											pionfinish[_giliran][a] = true;
+										}
 										_pionSprite[_giliran][a].setColor(sf::Color::White);
 										
 									}
@@ -710,10 +746,33 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 							//tabrakan
 							collision(_giliran, a);
+							add_finish(_giliran, a);
+							/*if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
+							{
+								pionfinish[_giliran][a] = true;
+							}*/
+							if (_finish[_giliran] == 4)
+							{
+								std::cout << "Masuk ke vector rank" << std::endl;
+								_rank.push_back(_giliran);
+							}
 
 							if (_move != 6)
 							{
 								_giliran++;
+							}
+							bool finished = false;
+							while (!finished)
+							{
+								finished = true;
+								for (int c = 0; c < _rank.size(); c++)
+								{
+									if (_giliran == _rank[c])
+									{
+										_giliran++;
+										finished = false;
+									}
+								}
 							}
 							if (_giliran > 3)
 							{
@@ -723,13 +782,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 							_turnFix = _turn[_giliran];
 							mode = 0;
 
-							add_finish(_giliran, a);
-
-							if (_finish[_giliran] == 4)
-							{
-								std::cout << "Masuk ke vector rank" << std::endl;
-								_rank.push_back(_giliran);
-							}
+							
 
 						}
 					}
@@ -746,16 +799,17 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
 			std::cout << "ESC" << std::endl;
+			for (int a = 0; a < _rank.size(); a++)
+			{
+				std::cout << _rank[a] << std::endl;
+			}
 			_state.push_back(new MainMenuState);
-			_state.back()->Init(_window);
+			_state.back()->Init(_window); 
 		}
 	}
 	_window.clear();
 
-	for (int a = 0; a < _rank.size(); a++)
-	{
-		std::cout << _rank[a] << std::endl;
-	}
+	
 }
 
 void GameState::Update(sf::RenderWindow& _window, std::vector<State*>& _state)
