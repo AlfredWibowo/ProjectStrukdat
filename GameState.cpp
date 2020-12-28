@@ -528,36 +528,6 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								}
 							}
 						}
-						//febri
-						if (_pion[_giliran][pion_ke] == _mapWarna[_giliran].getTail()) {
-							printf("MSK win");
-						}
-						/*if (_move <= jumlah_langkah_keTail(_pion, _giliran, pion_ke))
-						{
-							for (int i = 0; i < _move; i++)
-							{
-								setNext(_pion, _giliran, pion_ke, diMarkas);
-								Draw(_window);
-								Sleep(300);
-							}
-						}
-						else
-						{
-							int mundur = _move - jumlah_langkah_keTail(_pion, _giliran, pion_ke);
-
-							for (int i = 0; i < _move - mundur; i++)
-							{
-								setNext(_pion, _giliran, pion_ke, diMarkas);
-								Draw(_window);
-								Sleep(300);
-							}
-							for (int i = 0; i < mundur; i++)
-							{
-								setBack(_pion, _giliran, pion_ke, diMarkas);
-								Draw(_window);
-								Sleep(300);
-							}
-						}*/
 						_pionSprite[_giliran][pion_ke].setColor(sf::Color::White);
 
 					}
@@ -600,8 +570,6 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 			{
 				for (int a = 0; a < 4; a++)
 				{
-
-
 					if (_pionSprite[_giliran][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 					{
 						_pionSprite[_giliran][a].setColor(sf::Color::Magenta);
@@ -634,33 +602,27 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 									{
 
 										//klo di map warna
-
+										//sg baru
+										bool goback = false;
 										if (cek_di_mapWarna(_pion, _giliran, a) == true)
 										{
-											if (_move <= jumlah_langkah_keTail(_pion, _giliran, a))
+											for (int i = 0; i < _move; i++)
 											{
-												for (int i = 0; i < _move; i++)
-												{
-													setNext(_pion, _giliran, a, diMarkas);
-													Draw(_window);
-													Sleep(300);
-												}
-											}
-											else
-											{
-												int mundur = _move - jumlah_langkah_keTail(_pion, _giliran, a);
-
-												for (int i = 0; i < _move - mundur; i++)
-												{
-													setNext(_pion, _giliran, a, diMarkas);
-													Draw(_window);
-													Sleep(300);
-												}
-												for (int i = 0; i < mundur; i++)
+												if (goback)
 												{
 													setBack(_pion, _giliran, a, diMarkas);
 													Draw(_window);
 													Sleep(300);
+												}
+												else
+												{
+													setNext(_pion, _giliran, a, diMarkas);
+													Draw(_window);
+													Sleep(300);
+													if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
+													{
+														goback = true;
+													}
 												}
 											}
 											_pionSprite[_giliran][a].setColor(sf::Color::White);
@@ -669,16 +631,15 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 										//klo ga
 										else
 										{
-											bool goback = false;
 											for (int i = 0; i < _move; i++)
 											{
-
 												setNext(_pion, _giliran, a, diMarkas);
 												Draw(_window);
 												Sleep(300);
 											}
 											_pionSprite[_giliran][a].setColor(sf::Color::White);
 										}
+
 									}
 								}
 								else
