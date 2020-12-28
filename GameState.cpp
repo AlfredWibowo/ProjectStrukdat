@@ -247,6 +247,7 @@ void GameState::Init(sf::RenderWindow& _window)
 		for (int j = 0; j < 4; j++)
 		{
 			diMarkas[i][j] = true;
+			pionfinish[i][j] = false;
 		}
 	}
 
@@ -341,7 +342,7 @@ int GameState::jumlah_pion_yg_diluar(bool pion[4][4], int giliran)
 	int jumlah_pion_diluar = 0;
 	for (int i = 0; i < 4; i++)
 	{
-		if (pion[giliran][i] == false)
+		if (pion[giliran][i] == false && !pionfinish[giliran][i])
 		{
 			jumlah_pion_diluar++;
 		}
@@ -487,12 +488,12 @@ bool GameState::udh_finish_semua()
 {
 	for (int i = 0; i < 4; i++)
 	{
-		if (_finish[i] != 4)
+		if (_finish[i] == 4)
 		{
-			return false;
+			return true;
 		}
 	}
-	return true;
+	return false;
 }
 
 void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
@@ -504,13 +505,13 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 			_window.close();
 		}
 
-		cek_brp_finish();
+		/*cek_brp_finish();
 
 		if (udh_finish_semua())
 		{
 			_state.push_back(new RankingState);
 			_state.back()->Init(_window);
-		}
+		}*/
 
 		sf::Vector2i MousePos(sf::Mouse::getPosition(_window));
 
@@ -537,8 +538,14 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 		if (mode == 1)
 		{
-			bool isout;
 
+			/*cek_brp_finish();
+
+			if (udh_finish_semua())
+			{
+				_state.push_back(new RankingState);
+				_state.back()->Init(_window);
+			}*/
 			if (_move != 6 && jumlah_pion_yg_diluar(diMarkas, _giliran) <= 1)
 			{
 				if (jumlah_pion_yg_diluar(diMarkas, _giliran) == 1)
@@ -546,6 +553,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					int pion_ke = pion_yg_diluar(diMarkas, _giliran);
 					bool goback = false; //jika sampai finish maka true -> move dengan setback
 					//klo di map warna
+					
 					if (cek_di_mapWarna(_pion, _giliran, pion_ke) == true)
 					{
 						for (int a = 0; a < _move; a++)
@@ -567,6 +575,10 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								}
 							}
 						}
+						if (_pion[_giliran][pion_ke] == _mapWarna[_giliran].getTail())
+						{
+							pionfinish[_giliran][pion_ke] = true;
+						}
 						_pionSprite[_giliran][pion_ke].setColor(sf::Color::White);
 
 					}
@@ -584,7 +596,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 					//tabrakan
 					collision(_giliran, pion_ke);
-					
+
 					_giliran++;
 					if (_giliran > 3)
 					{
@@ -609,32 +621,16 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 			{
 				for (int a = 0; a < 4; a++)
 				{
-					if (_pionSprite[_giliran][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
+					if (_pionSprite[_giliran][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)) && !pionfinish[_giliran][a])
 					{
 						_pionSprite[_giliran][a].setColor(sf::Color::Magenta);
 
-						if (_move != 6)
-						{
-							for (int b = 0; b < 4; b++)
-							{
-								isout = true;
-							}
-						}
-
-						//kalau 6 keluar
-						if (_move == 6)
-						{
-							isout = true;
-						}
-
 						//action klo pion udah keluar
-						if (isout)
-						{
 							if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 							{
 								if (_move != 6)
 								{
-									if (isout && !(diMarkas[_giliran][a]))
+									if (!(diMarkas[_giliran][a]))
 									{
 
 										//klo di map warna
@@ -662,7 +658,10 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 												}
 											}
 											_pionSprite[_giliran][a].setColor(sf::Color::White);
-
+											if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
+											{
+												pionfinish[_giliran][a] = true;
+											}
 										}
 										//klo ga
 										else
@@ -721,7 +720,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 							}
 
-						}
+						/*}*/
 					}
 					else
 					{
@@ -731,7 +730,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 			}
 		}
 
-		
+
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{

@@ -36,10 +36,12 @@ private:
 	int _move;
 	int mode = 0;
 
+
 	bool diMarkas[4][4];
+	bool pionfinish[4][4];
+	//pionfinish[0][0,1,2,3] -> true ijo menang
 
 	int _finish[4];
-
 	int _rank[4];
 
 public://fungsi
@@ -63,5 +65,8 @@ public://fungsi
 
 	bool udh_finish_semua();
 
-	void cara_curang();
+	int getrank(int index)
+	{
+		return _rank[index];
+	}
 };
