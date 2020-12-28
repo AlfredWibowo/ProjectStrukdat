@@ -63,7 +63,6 @@ void RankingState::Init(sf::RenderWindow& _window)
 	}
 	_backButton.setTexture(&_backTexture);
 	_backButton.setSize(sf::Vector2f(250, 100));
-	_backButton.setOrigin(_backButton.getGlobalBounds().width, _backButton.getGlobalBounds().height / 2);
 	_backButton.setPosition(sf::Vector2f(WIDTH - _backButton.getSize().x - 5, HEIGHT - _backButton.getSize().y - 5));
 
 }
