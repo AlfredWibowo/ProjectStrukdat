@@ -4,6 +4,7 @@
 #include <vector>
 #include <time.h>
 #include <stdlib.h>
+#include <SFML/Audio.hpp>
 
 int main()
 {
@@ -13,6 +14,15 @@ int main()
 	_state.push_back(new MainMenuState);
 	_state.back()->Init(_window);
 
+	/*sf::SoundBuffer buffer;
+	if (!buffer.loadFromFile("soundtrack/sound.wav")) {
+		return -1;
+	}
+
+	sf::Sound sound;
+	sound.setBuffer(buffer);
+	sound.play();*/
+		
 	while (_window.isOpen())
 	{
 		sf::Event _event;
