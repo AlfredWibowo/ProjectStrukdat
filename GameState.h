@@ -29,8 +29,10 @@ private:
 
 	Node* _specialSkill[4];
 	sf::Text _nameSkill[4];
+	sf::Text _skillFix;
 
 	bool _onSpecialSpot = false;
+	bool shieldpion[4][4];
 
 	Node* _pion[4][4];
 	Node* _entry[4];
