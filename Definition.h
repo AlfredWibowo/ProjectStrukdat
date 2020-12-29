@@ -1,6 +1,6 @@
 #pragma once
 
-#define MAP_BG "image/map.png"
+#define MAP_BG "image/map2.png"
 #define ROLL_BUTTON "image/roll button.png"
 #define PLAY_BUTTON "image/play button.png"
 #define ABOUT_BUTTON "image/about button.png"
