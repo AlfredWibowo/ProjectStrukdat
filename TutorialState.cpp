@@ -4,6 +4,18 @@ void TutorialState::Init(sf::RenderWindow& _window)
 {
 	_window.setTitle("Game Tutorial");
 
+	//bg
+	if (!_bg1Texture.loadFromFile(TUTORIAL1_BG))
+	{
+		std::cout << "Failed to Open File" << std::endl;
+	}
+	if (!_bg2Texture.loadFromFile(TUTORIAL2_BG))
+	{
+		std::cout << "Failed to Open File" << std::endl;
+	}
+	_bg.setTexture(&_bg1Texture);
+	_bg.setSize(sf::Vector2f(WIDTH, HEIGHT));
+
 	//title
 	if (!_font.loadFromFile(FONT))
 	{
@@ -14,6 +26,8 @@ void TutorialState::Init(sf::RenderWindow& _window)
 	_title.setOrigin(_title.getGlobalBounds().width, _title.getGlobalBounds().height / 2);
 	_title.setPosition(sf::Vector2f(_window.getSize().x / 2 - 60, 20));
 	_title.setCharacterSize(80);
+	_title.setFillColor(sf::Color::Black);
+	_title.setStyle(sf::Text::Bold);
 
 	//back button
 	if (!_backTexture.loadFromFile(BACK_BUTTON))
@@ -40,18 +54,6 @@ void TutorialState::Init(sf::RenderWindow& _window)
 	_prevButton.setTexture(&_prevTexture);
 	_prevButton.setSize(sf::Vector2f(250, 100));
 	_prevButton.setPosition(sf::Vector2f(5, HEIGHT - _nextButton.getSize().y - 5));
-
-	//bg
-	if (!_bg1Texture.loadFromFile(TUTORIAL1_BG))
-	{
-		std::cout << "Failed to Open File" << std::endl;
-	}
-	if (!_bg2Texture.loadFromFile(TUTORIAL2_BG))
-	{
-		std::cout << "Failed to Open File" << std::endl;
-	}
-	_bg.setTexture(&_bg1Texture);
-	_bg.setSize(sf::Vector2f(WIDTH, HEIGHT));
 }
 void TutorialState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<State*>& _state)
 {

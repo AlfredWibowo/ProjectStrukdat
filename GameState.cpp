@@ -11,8 +11,8 @@ void GameState::Init(sf::RenderWindow& _window)
 	{
 		std::cout << "failed to open file" << std::endl;
 	}
-	//_music.setLoop(true);
-	//_music.play();
+	_music.setLoop(true);
+	_music.play();
 
 	//roll button
 	if (!_rollTexture.loadFromFile(ROLL_BUTTON))
@@ -1134,15 +1134,14 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					}
 				}
 			}
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		{
+			std::cout << "ESC" << std::endl;
+			_music.stop();
+			_state.push_back(new MainMenuState);
+			_state.back()->Init(_window);
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-			{
-				std::cout << "ESC" << std::endl;
-				_music.stop();
-				_state.push_back(new MainMenuState);
-				_state.back()->Init(_window);
-
-			}
 		}
 		_window.clear();
 	}

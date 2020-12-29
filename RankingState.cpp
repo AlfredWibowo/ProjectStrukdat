@@ -16,6 +16,8 @@ void RankingState::Init(sf::RenderWindow& _window)
 	_title.setOrigin(_title.getGlobalBounds().width, _title.getGlobalBounds().height / 2);
 	_title.setPosition(sf::Vector2f(_window.getSize().x / 2 - 60, 20));
 	_title.setCharacterSize(80);
+	_title.setFillColor(sf::Color::Black);
+	_title.setStyle(sf::Text::Bold);
 
 	if (!_font2.loadFromFile(FONT2))
 	{
