@@ -6,7 +6,7 @@ void MainMenuState::Init(sf::RenderWindow& _window)
 {
 
 	//bg
-	if (!_bgTexture.loadFromFile(MAP_BG))
+	if (!_bgTexture.loadFromFile(MAIN_MENU_BG))
 	{
 		std::cout << "failed to open file" << std::endl;
 	}

@@ -19,7 +19,7 @@
 #define PION_MERAH "image/merah.png"
 #define PION_KUNING "image/kuning.png"
 #define PION_BIRU "image/biru.png"
-#define MAIN_MENU_BG "image/main menu bg.png"
+#define MAIN_MENU_BG "image/BG_A.jpg"
 #define ABOUT_BG "image/about bg.png"
 #define TUTORIAL1_BG "image/tutorial1 bg.png"
 #define TUTORIAL2_BG "image/tutorial2 bg.png"
