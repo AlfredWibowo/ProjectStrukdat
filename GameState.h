@@ -29,6 +29,7 @@ private:
 
 	Node* _specialSkill[4];
 	sf::Text _nameSkill[4];
+
 	bool _onSpecialSpot = false;
 
 	Node* _pion[4][4];
@@ -37,6 +38,8 @@ private:
 	int _giliran = 0;
 	int _move;
 	int mode = 0;
+
+	int _skill;
 
 
 	bool diMarkas[4][4];
@@ -49,7 +52,7 @@ private:
 public://fungsi
 	void setNext(Node* pos[4][4], int _warna, int _pionKe, bool markas[4][4]);
 
-	void setBack(Node* pos[4][4], int _warna, int _pionKe, bool markas[4][4]);
+	void setBack(Node* pos[4][4], int _warna, int _pionKe);
 
 	void setdiMarkas(bool n, int i, int j);
 
@@ -66,4 +69,6 @@ public://fungsi
 	void add_finish(int giliran, int pionke);
 
 	bool udh_finish_semua();
+
+	bool diSpecialSkill(Node* pos[4][4], int _warna, int pion_ke);
 };

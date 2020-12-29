@@ -136,7 +136,10 @@ void GameState::Init(sf::RenderWindow& _window)
 	_mapLuar.add(245, 207);
 	_mapLuar.add(245, 169);
 	_mapLuar.add(245, 131);
+
 	_mapLuar.add(245, 94);
+	_specialSkill[0] = _mapLuar.getTail();
+
 	_mapLuar.add(245, 57);
 	_mapLuar.add(245, 19);
 
@@ -159,7 +162,10 @@ void GameState::Init(sf::RenderWindow& _window)
 	_mapLuar.add(357, 245);
 	_mapLuar.add(395, 245);
 	_mapLuar.add(433, 245);
+
 	_mapLuar.add(470, 245);
+	_specialSkill[1] = _mapLuar.getTail();
+
 	_mapLuar.add(508, 245);
 	_mapLuar.add(545, 245);
 
@@ -182,7 +188,10 @@ void GameState::Init(sf::RenderWindow& _window)
 	_mapLuar.add(320, 358);
 	_mapLuar.add(320, 395);
 	_mapLuar.add(320, 433);
+
 	_mapLuar.add(320, 470);
+	_specialSkill[2] = _mapLuar.getTail();
+
 	_mapLuar.add(320, 508);
 	_mapLuar.add(320, 545);
 
@@ -203,10 +212,12 @@ void GameState::Init(sf::RenderWindow& _window)
 	_mapLuar.add(245, 395);
 	_mapLuar.add(245, 358);
 	_mapLuar.add(207, 320);
-	_specialSkill[0] = _mapLuar.getTail();
 	_mapLuar.add(169, 320);
 	_mapLuar.add(132, 320);
+
 	_mapLuar.add(94, 320);
+	_specialSkill[3] = _mapLuar.getTail();
+
 	_mapLuar.add(56, 320);
 	_mapLuar.add(19, 320);
 
@@ -295,6 +306,18 @@ bool GameState::cek_di_mapWarna(Node* pos[4][4], int _warna, int pion_ke)
 	return false;
 }
 
+bool GameState::diSpecialSkill(Node* pos[4][4], int _warna, int pion_ke)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		if (pos[_warna][pion_ke] == _specialSkill[i])
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 int GameState::jumlah_langkah_keTail(Node* pos[4][4], int _warna, int pion_ke)
 {
 	int langkah = 0;
@@ -327,19 +350,23 @@ void GameState::setNext(Node* pos[4][4], int _warna, int _pionKe, bool markas[4]
 	}
 	else
 	{
-		pos[_warna][_pionKe] = _entry[_warna]/*_mapWarna[_warna].getHead()*/;
+		pos[_warna][_pionKe] = _entry[_warna];
 		_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f(pos[_warna][_pionKe]->_posX, pos[_warna][_pionKe]->_posY));
 		setdiMarkas(false, _warna, _pionKe);
 	}
 }
 
-void GameState::setBack(Node* pos[4][4], int _warna, int _pionKe, bool markas[4][4])
+void GameState::setBack(Node* pos[4][4], int _warna, int _pionKe)
 {
-	if (markas[_warna][_pionKe] == false)
+	if (pos[_warna][_pionKe] == _mapWarna[_warna].getHead())
+	{
+		pos[_warna][_pionKe] = _exit[_warna];
+	}
+	else
 	{
 		pos[_warna][_pionKe] = pos[_warna][_pionKe]->prev;
-		_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f(pos[_warna][_pionKe]->_posX, pos[_warna][_pionKe]->_posY));
 	}
+	_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f(pos[_warna][_pionKe]->_posX, pos[_warna][_pionKe]->_posY));
 }
 
 void GameState::setdiMarkas(bool n, int i, int j)
@@ -579,7 +606,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 						{
 							if (goback)
 							{
-								setBack(_pion, _giliran, pion_ke, diMarkas);
+								setBack(_pion, _giliran, pion_ke);
 								Draw(_window);
 								Sleep(300);
 							}
@@ -612,37 +639,44 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 					//tabrakan
 					collision(_giliran, pion_ke);
+
 					add_finish(_giliran, pion_ke);
-					/*if (_pion[_giliran][pion_ke] == _mapWarna[_giliran].getTail())
-					{
-						pionfinish[_giliran][pion_ke] = true;
-					}*/
+				
 					if (_finish[_giliran] == 4)
 					{
 						std::cout << "Masuk ke vector rank" << std::endl;
 						_rank.push_back(_giliran);
 					}
 
-					if (_move != 6)
+					//klo dispecial skill
+					if (diSpecialSkill(_pion, _giliran, pion_ke))
 					{
-						_giliran++;
+						std::cout << "masuk special skill bang " << std::endl;
+						mode = 3;
 					}
-					bool finished = false;
-					for (int c = 0; c < _rank.size(); c++)
+					else
 					{
-						if (_giliran == _rank[c])
+						if (_move != 6)
 						{
 							_giliran++;
 						}
+						
+						for (int c = 0; c < _rank.size(); c++)
+						{
+							if (_giliran == _rank[c])
+							{
+								_giliran++;
+							}
+						}
+						if (_giliran > 3)
+						{
+							_giliran = 0;
+						}
+						_turnFix = _turn[_giliran];
+						mode = 0;
 					}
-					if (_giliran > 3)
-					{
-						_giliran = 0;
-					}
-					_turnFix = _turn[_giliran];
-					mode = 0;
 				}
-				else
+				else if(jumlah_pion_yg_diluar(diMarkas, _giliran) == 0)//klo ga ad yg diluar markas langsung ganti turn
 				{
 					if (_move != 6)
 					{
@@ -697,7 +731,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 										{
 											if (goback)
 											{
-												setBack(_pion, _giliran, a, diMarkas);
+												setBack(_pion, _giliran, a);
 												Draw(_window);
 												Sleep(300);
 											}
@@ -713,10 +747,6 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 											}
 										}
 										_pionSprite[_giliran][a].setColor(sf::Color::White);
-										if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
-										{
-											pionfinish[_giliran][a] = true;
-										}
 
 									}
 									//klo ga
@@ -727,10 +757,6 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 											setNext(_pion, _giliran, a, diMarkas);
 											Draw(_window);
 											Sleep(300);
-										}
-										if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
-										{
-											pionfinish[_giliran][a] = true;
 										}
 										_pionSprite[_giliran][a].setColor(sf::Color::White);
 
@@ -745,7 +771,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								{
 									if (goback)
 									{
-										setBack(_pion, _giliran, a, diMarkas);
+										setBack(_pion, _giliran, a);
 										Draw(_window);
 										Sleep(300);
 									}
@@ -768,21 +794,22 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 							//tabrakan
 							collision(_giliran, a);
 							
-
+							//klo ad yg finish finish[i]++
 							add_finish(_giliran, a);
-							/*if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
-							{
-								pionfinish[_giliran][a] = true;
-							}*/
+
+
+							//klo udh difinish semua
 							if (_finish[_giliran] == 4)
 							{
 								std::cout << "Masuk ke vector rank" << std::endl;
 								_rank.push_back(_giliran);
 							}
 
-							if (_pion[_giliran][a] == _specialSkill[0])
+
+							//klo dispecial skill
+							if (diSpecialSkill(_pion, _giliran, a))
 							{
-								std::cout << "special skill" << std::endl;
+								std::cout << "masuk special skill bang " << std::endl;
 								mode = 3;
 							}
 							else
@@ -791,35 +818,21 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								{
 									_giliran++;
 								}
-								bool finished = false;
 
+								for (int c = 0; c < _rank.size(); c++)
+								{
+									if (_giliran == _rank[c])
+									{
+										_giliran++;
+									}
+								}
 								if (_giliran > 3)
 								{
 									_giliran = 0;
 								}
-
-								while (!finished)
-								{
-									finished = true;
-									for (int c = 0; c < _rank.size(); c++)
-									{
-										if (_giliran == _rank[c])
-										{
-											_giliran++;
-											if (_giliran > 3)
-											{
-												_giliran = 0;
-											}
-											finished = false;
-										}
-									}
-								}
-
 								_turnFix = _turn[_giliran];
 								mode = 0;
 							}
-							
-
 						}
 					}
 					else
@@ -830,6 +843,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 			}
 		}
 
+		//roll klo dispecial skill
 		else if (mode == 3)
 		{
 			if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
@@ -837,10 +851,9 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 				_rollButton.setFillColor(sf::Color::Yellow);
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					/*_move = rand() % 6 + 1;*/
-					_move = 0;
-					std::cin >> _move;
-					_dice.setTexture(&_diceHead[_move - 1]);
+					/*_skill = rand() % 2 + 1;*/
+					std::cin >> _skill;
+					_dice.setTexture(&_diceHead[_skill - 1]);
 					_rollButton.setFillColor(sf::Color::White);
 					std::cout << _giliran << std::endl;
 					mode = 4;
@@ -852,13 +865,14 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 			}
 		}
 
+		//action dari special skill
 		else if (mode == 4)
 		{
 			for (int b = 0; b < 4; b++)
 			{
 				for (int a = 0; a < 4; a++)
 				{
-					if (_pionSprite[b][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)) && !pionfinish[_giliran][a])
+					if (_pionSprite[b][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)) && !pionfinish[_giliran][a] && !diMarkas[b][a])
 					{
 						_pionSprite[b][a].setColor(sf::Color::Magenta);
 						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -866,85 +880,158 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 							std::cout << "Special skill jalan ke pion yg ditekan " << std::endl;
 							mode = 0;
 
-							bool goback = false;
-							if (cek_di_mapWarna(_pion, b, a) == true)
+							switch (_skill)
 							{
-								for (int i = 0; i < _move; i++)
+							case 1://maju
+
+								if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 								{
-									if (goback)
+									_rollButton.setFillColor(sf::Color::Yellow);
+									if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 									{
-										setBack(_pion, b, a, diMarkas);
-										Draw(_window);
-										Sleep(300);
-									}
-									else
-									{
-										setNext(_pion, b, a, diMarkas);
-										Draw(_window);
-										Sleep(300);
-										if (_pion[b][a] == _mapWarna[b].getTail())
+										/*_move = rand() % 6 + 1;*/
+										std::cin >> _move;
+										_dice.setTexture(&_diceHead[_skill - 1]);
+										_rollButton.setFillColor(sf::Color::White);
+
+										bool goback = false;
+										if (cek_di_mapWarna(_pion, b, a) == true)
 										{
-											goback = true;
+											for (int i = 0; i < _move; i++)
+											{
+												if (goback)
+												{
+													setBack(_pion, b, a);
+													Draw(_window);
+													Sleep(300);
+												}
+												else
+												{
+													setNext(_pion, b, a, diMarkas);
+													Draw(_window);
+													Sleep(300);
+													if (_pion[b][a] == _mapWarna[b].getTail())
+													{
+														goback = true;
+													}
+												}
+											}
+											_pionSprite[b][a].setColor(sf::Color::White);
+											if (_pion[b][a] == _mapWarna[b].getTail())
+											{
+												pionfinish[b][a] = true;
+											}
+
+										}
+										//klo ga
+										else
+										{
+											for (int i = 0; i < _move; i++)
+											{
+												setNext(_pion, b, a, diMarkas);
+												Draw(_window);
+												Sleep(300);
+											}
+											if (_pion[b][a] == _mapWarna[b].getTail())
+											{
+												pionfinish[b][a] = true;
+											}
+											_pionSprite[b][a].setColor(sf::Color::White);
+
+										}
+
+										collision(b, a);
+										add_finish(b, a);
+
+
+										if (_finish[_giliran] == 4)
+										{
+											std::cout << "Masuk ke vector rank" << std::endl;
+											_rank.push_back(_giliran);
+										}
+										//klo dispecial skill
+										if (diSpecialSkill(_pion, _giliran, a))
+										{
+											std::cout << "masuk special skill bang " << std::endl;
+											mode = 3;
+										}
+										else
+										{
+											if (_move != 6)
+											{
+												_giliran++;
+											}
+											bool finished = false;
+											for (int c = 0; c < _rank.size(); c++)
+											{
+												if (_giliran == _rank[c])
+												{
+													_giliran++;
+												}
+											}
+											if (_giliran > 3)
+											{
+												_giliran = 0;
+											}
+											_turnFix = _turn[_giliran];
+										
 										}
 									}
 								}
-								_pionSprite[b][a].setColor(sf::Color::White);
-								if (_pion[b][a] == _mapWarna[b].getTail())
+								else
 								{
-									pionfinish[b][a] = true;
+									_rollButton.setFillColor(sf::Color::White);
 								}
 
-							}
-							//klo ga
-							else
-							{
-								for (int i = 0; i < _move; i++)
+								
+
+							case 2://mundur
+								_rollButton.setFillColor(sf::Color::Yellow);
+								if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 								{
-									setNext(_pion, b, a, diMarkas);
-									Draw(_window);
-									Sleep(300);
-								}
-								if (_pion[b][a] == _mapWarna[b].getTail())
-								{
-									pionfinish[b][a] = true;
-								}
-								_pionSprite[b][a].setColor(sf::Color::White);
+									/*_move = rand() % 6 + 1;*/
+									std::cin >> _move;
+									_dice.setTexture(&_diceHead[_skill - 1]);
+									_rollButton.setFillColor(sf::Color::White);
 
-							}
-
-							collision(b, a);
-							add_finish(b, a);
-							/*if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
-							{
-								pionfinish[_giliran][a] = true;
-							}*/
-							if (_finish[_giliran] == 4)
-							{
-								std::cout << "Masuk ke vector rank" << std::endl;
-								_rank.push_back(_giliran);
-							}
-
-							_giliran++;
-							if (_giliran > 3)
-							{
-								_giliran = 0;
-							}
-
-							for (int c = 0; c < _rank.size(); c++)
-							{
-								if (_giliran == _rank[c])
-								{
-									_giliran++;
-									if (_giliran > 3)
+									for (int i = 0; i < _move; i++)
 									{
-										_giliran = 0;
+											setBack(_pion, b, a);
+											Draw(_window);
+											Sleep(300);
+									}
+
+									collision(b, a);
+
+									//klo dispecial skill
+									if (diSpecialSkill(_pion, _giliran, a))
+									{
+										std::cout << "masuk special skill bang " << std::endl;
+										mode = 3;
+									}
+									else
+									{
+										if (_move != 6)
+										{
+											_giliran++;
+										}
+										bool finished = false;
+										for (int c = 0; c < _rank.size(); c++)
+										{
+											if (_giliran == _rank[c])
+											{
+												_giliran++;
+											}
+										}
+										if (_giliran > 3)
+										{
+											_giliran = 0;
+										}
+										_turnFix = _turn[_giliran];
+										
 									}
 								}
 							}
-
-							_turnFix = _turn[_giliran];
-							mode = 0;
-
 						}
 					}
 					else
