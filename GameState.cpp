@@ -1240,6 +1240,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								{
 									_rollButton.setFillColor(sf::Color::White);
 								}
+								break;
 
 								
 
@@ -1290,6 +1291,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 										
 									}
 								}
+								break;
 							case 3://shield
 								_pionSprite[b][a].setColor(sf::Color::White);
 								_pionSprite[b][a].setTexture(_pionShieldTexture[b]);
@@ -1312,6 +1314,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 									_giliran = 0;
 								}
 								_turnFix = _turn[_giliran];
+								break;
 
 							}
 							mode = 0;
