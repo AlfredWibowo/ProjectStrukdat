@@ -52,7 +52,7 @@ private:
 public://fungsi
 	void setNext(Node* pos[4][4], int _warna, int _pionKe, bool markas[4][4]);
 
-	void setBack(Node* pos[4][4], int _warna, int _pionKe);
+	void setBack(Node* pos[4][4], int _warna, int _pionKe, bool markas[4][4]);
 
 	void setdiMarkas(bool n, int i, int j);
 
