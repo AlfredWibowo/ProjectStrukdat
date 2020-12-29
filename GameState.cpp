@@ -11,8 +11,8 @@ void GameState::Init(sf::RenderWindow& _window)
 	{
 		std::cout << "failed to open file" << std::endl;
 	}
-	_music.setLoop(true);
-	_music.play();
+	//_music.setLoop(true);
+	//_music.play();
 
 	//roll button
 	if (!_rollTexture.loadFromFile(ROLL_BUTTON))
@@ -99,7 +99,7 @@ void GameState::Init(sf::RenderWindow& _window)
 	{
 		_turn[i].setFont(_font);
 		_turn[i].setCharacterSize(60);
-		_turn[i].setPosition(sf::Vector2f(3.7*_rollButton.getPosition().x, 1/4*HEIGHT));
+		_turn[i].setPosition(sf::Vector2f(3.7 * _rollButton.getPosition().x, 1 / 4 * HEIGHT));
 	}
 
 
@@ -203,6 +203,7 @@ void GameState::Init(sf::RenderWindow& _window)
 	_mapLuar.add(245, 395);
 	_mapLuar.add(245, 358);
 	_mapLuar.add(207, 320);
+	_specialSkill[0] = _mapLuar.getTail();
 	_mapLuar.add(169, 320);
 	_mapLuar.add(132, 320);
 	_mapLuar.add(94, 320);
@@ -326,7 +327,7 @@ void GameState::setNext(Node* pos[4][4], int _warna, int _pionKe, bool markas[4]
 	}
 	else
 	{
-		pos[_warna][_pionKe] = /*_entry[_warna]*/_mapWarna[_warna].getHead();
+		pos[_warna][_pionKe] = _entry[_warna]/*_mapWarna[_warna].getHead()*/;
 		_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f(pos[_warna][_pionKe]->_posX, pos[_warna][_pionKe]->_posY));
 		setdiMarkas(false, _warna, _pionKe);
 	}
@@ -537,8 +538,8 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 				_state.push_back(new RankingState);
 				_state.back()->Init(_window);
-			
-				
+
+
 			}
 
 			if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
@@ -561,9 +562,9 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 			}
 		}
 
-		if (mode == 1)
+		else if (mode == 1)
 		{
-			
+
 			if (_move != 6)
 			{
 				if (jumlah_pion_yg_diluar(diMarkas, _giliran) == 1)
@@ -571,7 +572,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					int pion_ke = pion_yg_diluar(diMarkas, _giliran);
 					bool goback = false; //jika sampai finish maka true -> move dengan setback
 					//klo di map warna
-					
+
 					if (cek_di_mapWarna(_pion, _giliran, pion_ke) == true)
 					{
 						for (int a = 0; a < _move; a++)
@@ -593,7 +594,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								}
 							}
 						}
-						
+
 						_pionSprite[_giliran][pion_ke].setColor(sf::Color::White);
 
 					}
@@ -638,6 +639,8 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					{
 						_giliran = 0;
 					}
+					_turnFix = _turn[_giliran];
+					mode = 0;
 				}
 				else
 				{
@@ -646,18 +649,23 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 						_giliran++;
 					}
 
-					for (int c = 0; c < _rank.size(); c++)
-					{
-						if (_giliran == _rank[c])
-						{
-							_giliran++;
-						}
-					}
+
 					if (_giliran > 3)
 					{
 						_giliran = 0;
 					}
 
+					for (int c = 0; c < _rank.size(); c++)
+					{
+						if (_giliran == _rank[c])
+						{
+							_giliran++;
+							if (_giliran > 3)
+							{
+								_giliran = 0;
+							}
+						}
+					}
 					_turnFix = _turn[_giliran];
 					mode = 0;
 				}
@@ -709,7 +717,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 										{
 											pionfinish[_giliran][a] = true;
 										}
-										
+
 									}
 									//klo ga
 									else
@@ -725,7 +733,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 											pionfinish[_giliran][a] = true;
 										}
 										_pionSprite[_giliran][a].setColor(sf::Color::White);
-										
+
 									}
 
 								}
@@ -759,6 +767,8 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 							//tabrakan
 							collision(_giliran, a);
+							
+
 							add_finish(_giliran, a);
 							/*if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
 							{
@@ -769,33 +779,45 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								std::cout << "Masuk ke vector rank" << std::endl;
 								_rank.push_back(_giliran);
 							}
-							
 
-							if (_move != 6)
+							if (_pion[_giliran][a] == _specialSkill[0])
 							{
-								_giliran++;
+								std::cout << "special skill" << std::endl;
+								mode = 3;
 							}
-							bool finished = false;
-							while (!finished)
+							else
 							{
-								finished = true;
-								for (int c = 0; c < _rank.size(); c++)
+								if (_move != 6)
 								{
-									if (_giliran == _rank[c])
+									_giliran++;
+								}
+								bool finished = false;
+
+								if (_giliran > 3)
+								{
+									_giliran = 0;
+								}
+
+								while (!finished)
+								{
+									finished = true;
+									for (int c = 0; c < _rank.size(); c++)
 									{
-										_giliran++;
-										finished = false;
+										if (_giliran == _rank[c])
+										{
+											_giliran++;
+											if (_giliran > 3)
+											{
+												_giliran = 0;
+											}
+											finished = false;
+										}
 									}
 								}
-							}
-							if (_giliran > 3)
-							{
-								_giliran = 0;
-							}
 
-							_turnFix = _turn[_giliran];
-							mode = 0;
-
+								_turnFix = _turn[_giliran];
+								mode = 0;
+							}
 							
 
 						}
@@ -808,20 +830,142 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 			}
 		}
 
-
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+		else if (mode == 3)
 		{
-			std::cout << "ESC" << std::endl;
-			_music.stop();
-			_state.push_back(new MainMenuState);
-			_state.back()->Init(_window); 
-			
+			if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
+			{
+				_rollButton.setFillColor(sf::Color::Yellow);
+				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+				{
+					/*_move = rand() % 6 + 1;*/
+					_move = 0;
+					std::cin >> _move;
+					_dice.setTexture(&_diceHead[_move - 1]);
+					_rollButton.setFillColor(sf::Color::White);
+					std::cout << _giliran << std::endl;
+					mode = 4;
+				}
+			}
+			else
+			{
+				_rollButton.setFillColor(sf::Color::White);
+			}
 		}
-	}
-	_window.clear();
 
-	
+		else if (mode == 4)
+		{
+			for (int b = 0; b < 4; b++)
+			{
+				for (int a = 0; a < 4; a++)
+				{
+					if (_pionSprite[b][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)) && !pionfinish[_giliran][a])
+					{
+						_pionSprite[b][a].setColor(sf::Color::Magenta);
+						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+						{
+							std::cout << "Special skill jalan ke pion yg ditekan " << std::endl;
+							mode = 0;
+
+							bool goback = false;
+							if (cek_di_mapWarna(_pion, b, a) == true)
+							{
+								for (int i = 0; i < _move; i++)
+								{
+									if (goback)
+									{
+										setBack(_pion, b, a, diMarkas);
+										Draw(_window);
+										Sleep(300);
+									}
+									else
+									{
+										setNext(_pion, b, a, diMarkas);
+										Draw(_window);
+										Sleep(300);
+										if (_pion[b][a] == _mapWarna[b].getTail())
+										{
+											goback = true;
+										}
+									}
+								}
+								_pionSprite[b][a].setColor(sf::Color::White);
+								if (_pion[b][a] == _mapWarna[b].getTail())
+								{
+									pionfinish[b][a] = true;
+								}
+
+							}
+							//klo ga
+							else
+							{
+								for (int i = 0; i < _move; i++)
+								{
+									setNext(_pion, b, a, diMarkas);
+									Draw(_window);
+									Sleep(300);
+								}
+								if (_pion[b][a] == _mapWarna[b].getTail())
+								{
+									pionfinish[b][a] = true;
+								}
+								_pionSprite[b][a].setColor(sf::Color::White);
+
+							}
+
+							collision(b, a);
+							add_finish(b, a);
+							/*if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
+							{
+								pionfinish[_giliran][a] = true;
+							}*/
+							if (_finish[_giliran] == 4)
+							{
+								std::cout << "Masuk ke vector rank" << std::endl;
+								_rank.push_back(_giliran);
+							}
+
+							_giliran++;
+							if (_giliran > 3)
+							{
+								_giliran = 0;
+							}
+
+							for (int c = 0; c < _rank.size(); c++)
+							{
+								if (_giliran == _rank[c])
+								{
+									_giliran++;
+									if (_giliran > 3)
+									{
+										_giliran = 0;
+									}
+								}
+							}
+
+							_turnFix = _turn[_giliran];
+							mode = 0;
+
+						}
+					}
+					else
+					{
+						_pionSprite[b][a].setColor(sf::Color::White);
+					}
+				}
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+			{
+				std::cout << "ESC" << std::endl;
+				_music.stop();
+				_state.push_back(new MainMenuState);
+				_state.back()->Init(_window);
+
+			}
+		}
+		_window.clear();
+	}
+
 }
 
 void GameState::Update(sf::RenderWindow& _window, std::vector<State*>& _state)
