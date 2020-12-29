@@ -5,6 +5,10 @@ void RankingState::Init(sf::RenderWindow& _window)
 {
 	_window.setTitle("Ranking");
 
+	//bg
+	_bg.setFillColor(sf::Color::Black);
+	_bg.setSize(sf::Vector2f(WIDTH, HEIGHT));
+
 	//title
 	if (!_font.loadFromFile(FONT))
 	{
@@ -16,7 +20,7 @@ void RankingState::Init(sf::RenderWindow& _window)
 	_title.setOrigin(_title.getGlobalBounds().width, _title.getGlobalBounds().height / 2);
 	_title.setPosition(sf::Vector2f(_window.getSize().x / 2 - 60, 20));
 	_title.setCharacterSize(80);
-	_title.setFillColor(sf::Color::Black);
+	_title.setFillColor(sf::Color::White);
 	_title.setStyle(sf::Text::Bold);
 
 	if (!_font2.loadFromFile(FONT2))
@@ -101,6 +105,7 @@ void RankingState::Update(sf::RenderWindow& _window, std::vector<State*>& _state
 void RankingState::Draw(sf::RenderWindow& _window)
 {
 	_window.clear();
+	_window.draw(_bg);
 	_window.draw(_title);
 	for (int i = 0; i < 4; i++)
 	{

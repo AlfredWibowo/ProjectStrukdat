@@ -19,6 +19,9 @@ private:
 	sf::Texture _backTexture;
 	sf::RectangleShape _backButton;
 
+	sf::RectangleShape _bg;
+	sf::Texture _bgTexture;
+
 	int rank[4];
 };
 
