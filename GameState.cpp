@@ -695,10 +695,11 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 				_rollButton.setFillColor(sf::Color::Yellow);
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					_move = rand() % 6 + 1;
+					std::cout << "move: "; std::cin >> _move;
+					//_move = rand() % 6 + 1;
 					_dice.setTexture(&_diceHead[_move - 1]);
 					_rollButton.setFillColor(sf::Color::White);
-					std::cout << _giliran << std::endl;
+					std::cout <<"giliran = "<< _giliran << std::endl;
 					mode = 1;
 				}
 			}
@@ -710,12 +711,14 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 		else if (mode == 1)
 		{
-
 			if (_move != 6)
 			{
 				if (jumlah_pion_yg_diluar(diMarkas, _giliran) == 1)
 				{
 					int pion_ke = pion_yg_diluar(diMarkas, _giliran);
+
+					_lastPos = pion_ke; //buat special skill shield
+
 					bool goback = false; //jika sampai finish maka true -> move dengan setback
 					//klo di map warna
 
@@ -771,7 +774,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					if (diSpecialSkill(_pion, _giliran, pion_ke))
 					{
 						std::cout << "masuk special skill bang " << std::endl;
-						mode = 3;
+						mode = 2;
 					}
 					else
 					{
@@ -822,140 +825,141 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					_turnFix = _turn[_giliran];
 					mode = 0;
 				}
-				else if(jumlah_pion_yg_diluar(diMarkas, _giliran) > 1)
+				else if (jumlah_pion_yg_diluar(diMarkas, _giliran) > 1)
 				{
-				for (int a = 0; a < 4; a++)
-				{
-					if (_pionSprite[_giliran][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)) && !pionfinish[_giliran][a])
+					for (int a = 0; a < 4; a++)
 					{
-						_pionSprite[_giliran][a].setColor(sf::Color::Magenta);
-
-						//action klo pion udah keluar
-						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+						if (_pionSprite[_giliran][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)) && !pionfinish[_giliran][a])
 						{
-							if (_move != 6)
-							{
-								if (!(diMarkas[_giliran][a]))
-								{
+							_pionSprite[_giliran][a].setColor(sf::Color::Magenta);
 
-									//klo di map warna
-									//sg baru
-									bool goback = false;
-									if (cek_di_mapWarna(_pion, _giliran, a) == true)
+							//action klo pion udah keluar
+							if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+							{
+								_lastPos = a; //buat special skill shield
+								if (_move != 6)
+								{
+									if (!(diMarkas[_giliran][a]))
 									{
-										for (int i = 0; i < _move; i++)
+
+										//klo di map warna
+										//sg baru
+										bool goback = false;
+										if (cek_di_mapWarna(_pion, _giliran, a) == true)
 										{
-											if (goback)
+											for (int i = 0; i < _move; i++)
 											{
-												setBack(_pion, _giliran, a, diMarkas);
-												Draw(_window);
-												Sleep(300);
+												if (goback)
+												{
+													setBack(_pion, _giliran, a, diMarkas);
+													Draw(_window);
+													Sleep(300);
+												}
+												else
+												{
+													setNext(_pion, _giliran, a, diMarkas);
+													Draw(_window);
+													Sleep(300);
+													if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
+													{
+														goback = true;
+													}
+												}
 											}
-											else
+											_pionSprite[_giliran][a].setColor(sf::Color::White);
+
+										}
+										//klo ga
+										else
+										{
+											for (int i = 0; i < _move; i++)
 											{
 												setNext(_pion, _giliran, a, diMarkas);
 												Draw(_window);
 												Sleep(300);
-												if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
-												{
-													goback = true;
-												}
 											}
+											_pionSprite[_giliran][a].setColor(sf::Color::White);
+
 										}
-										_pionSprite[_giliran][a].setColor(sf::Color::White);
 
 									}
-									//klo ga
-									else
+								}
+								else
+								{
+									bool goback = false; //klo nyampek finish jdi true
+									for (int i = 0; i < _move; i++)
 									{
-										for (int i = 0; i < _move; i++)
+										if (goback)
+										{
+											setBack(_pion, _giliran, a, diMarkas);
+											Draw(_window);
+											Sleep(300);
+										}
+										else
 										{
 											setNext(_pion, _giliran, a, diMarkas);
 											Draw(_window);
 											Sleep(300);
-										}
-										_pionSprite[_giliran][a].setColor(sf::Color::White);
-
-									}
-
-								}
-							}
-							else
-							{
-								bool goback = false; //klo nyampek finish jdi true
-								for (int i = 0; i < _move; i++)
-								{
-									if (goback)
-									{
-										setBack(_pion, _giliran, a, diMarkas);
-										Draw(_window);
-										Sleep(300);
-									}
-									else
-									{
-										setNext(_pion, _giliran, a, diMarkas);
-										Draw(_window);
-										Sleep(300);
-										if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
-										{
-											goback = true;
+											if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
+											{
+												goback = true;
+											}
 										}
 									}
+
+
+									_pionSprite[_giliran][a].setColor(sf::Color::White);
+								}
+
+								//tabrakan
+								collision(_giliran, a);
+
+								//klo ad yg finish finish[i]++
+								add_finish(_giliran, a);
+
+
+								//klo udh difinish semua
+								if (_finish[_giliran] == 4)
+								{
+									std::cout << "Masuk ke vector rank" << std::endl;
+									_rank.push_back(_giliran);
 								}
 
 
-								_pionSprite[_giliran][a].setColor(sf::Color::White);
-							}
-
-							//tabrakan
-							collision(_giliran, a);
-
-							//klo ad yg finish finish[i]++
-							add_finish(_giliran, a);
-
-
-							//klo udh difinish semua
-							if (_finish[_giliran] == 4)
-							{
-								std::cout << "Masuk ke vector rank" << std::endl;
-								_rank.push_back(_giliran);
-							}
-
-
-							//klo dispecial skill
-							if (diSpecialSkill(_pion, _giliran, a))
-							{
-								std::cout << "masuk special skill bang " << std::endl;
-								mode = 3;
-							}
-							else
-							{
-								if (_move != 6)
+								//klo dispecial skill
+								if (diSpecialSkill(_pion, _giliran, a))
 								{
-									_giliran++;
+									std::cout << "masuk special skill bang " << std::endl;
+									mode = 2;
 								}
-
-								for (int c = 0; c < _rank.size(); c++)
+								else
 								{
-									if (_giliran == _rank[c])
+									if (_move != 6)
 									{
 										_giliran++;
 									}
+
+									for (int c = 0; c < _rank.size(); c++)
+									{
+										if (_giliran == _rank[c])
+										{
+											_giliran++;
+										}
+									}
+									if (_giliran > 3)
+									{
+										_giliran = 0;
+									}
+									_turnFix = _turn[_giliran];
+									mode = 0;
 								}
-								if (_giliran > 3)
-								{
-									_giliran = 0;
-								}
-								_turnFix = _turn[_giliran];
-								mode = 0;
 							}
 						}
+						else
+						{
+							_pionSprite[_giliran][a].setColor(sf::Color::White);
+						}
 					}
-					else
-					{
-						_pionSprite[_giliran][a].setColor(sf::Color::White);
-					}
-				}
 				}
 
 			}
@@ -971,6 +975,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 						//action klo pion udah keluar
 						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 						{
+							_lastPos = a; //buat special skill shield
 							if (_move != 6)
 							{
 								if (!(diMarkas[_giliran][a]))
@@ -1064,7 +1069,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 							if (diSpecialSkill(_pion, _giliran, a))
 							{
 								std::cout << "masuk special skill bang " << std::endl;
-								mode = 3;
+								mode = 2;
 							}
 							else
 							{
@@ -1098,7 +1103,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 		}
 
 		//roll klo dispecial skill
-		else if (mode == 3)
+		else if (mode == 2)
 		{
 			if (_rollButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 			{
@@ -1110,7 +1115,15 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					_dice.setTexture(&_diceHead[_skill - 1]);
 					_rollButton.setFillColor(sf::Color::White);
 					std::cout << _giliran << std::endl;
-					mode = 4;
+
+					if (_skill == 3)
+					{
+						mode = 4;
+					}
+					else
+					{
+						mode = 3;
+					}
 					_skillFix = _nameSkill[_skill - 1];
 				}
 			}
@@ -1121,8 +1134,8 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 			Draw(_window);
 		}
 
-		//action dari special skill
-		else if (mode == 4)
+		//action dari special skill maju atau mundur
+		else if (mode == 3)
 		{
 			for (int b = 0; b < 4; b++)
 			{
@@ -1134,7 +1147,6 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 						{
 							std::cout << "Special skill jalan ke pion yg ditekan " << std::endl;
-							
 
 							switch (_skill)
 							{
@@ -1199,7 +1211,6 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 										collision(b, a);
 										add_finish(b, a);
 
-
 										if (_finish[_giliran] == 4)
 										{
 											std::cout << "Masuk ke vector rank" << std::endl;
@@ -1209,7 +1220,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 										if (diSpecialSkill(_pion, _giliran, a))
 										{
 											std::cout << "masuk special skill bang " << std::endl;
-											mode = 3;
+											mode = 2;
 										}
 										else
 										{
@@ -1265,7 +1276,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 									if (diSpecialSkill(_pion, _giliran, a))
 									{
 										std::cout << "masuk special skill bang " << std::endl;
-										mode = 3;
+										mode = 2;
 									}
 									else
 									{
@@ -1290,30 +1301,6 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 									}
 								}
 								break;
-							case 3://shield
-								_pionSprite[b][a].setColor(sf::Color::White);
-								_pionSprite[b][a].setTexture(_pionShieldTexture[b]);
-								shieldpion[b][a] = true;
-								std::cout << "pion " << b << " " << a << " dpt shield" << std::endl;
-								if (_move != 6)
-								{
-									_giliran++;
-								}
-								bool finished = false;
-								for (int c = 0; c < _rank.size(); c++)
-								{
-									if (_giliran == _rank[c])
-									{
-										_giliran++;
-									}
-								}
-								if (_giliran > 3)
-								{
-									_giliran = 0;
-								}
-								_turnFix = _turn[_giliran];
-								break;
-
 							}
 							mode = 0;
 						}
@@ -1326,6 +1313,36 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 				}
 			}
 		}
+
+		//action dari special skill shield
+		else if (mode == 4)
+		{
+			_pionSprite[_giliran][_lastPos].setColor(sf::Color::White);
+			_pionSprite[_giliran][_lastPos].setTexture(_pionShieldTexture[_giliran]);
+			shieldpion[_giliran][_lastPos] = true;
+			std::cout << "pion " << _giliran << " " << _lastPos << " dpt shield" << std::endl;
+			if (_move != 6)
+			{
+				_giliran++;
+			}
+			bool finished = false;
+			for (int c = 0; c < _rank.size(); c++)
+			{
+				if (_giliran == _rank[c])
+				{
+					_giliran++;
+				}
+			}
+			if (_giliran > 3)
+			{
+				_giliran = 0;
+			}
+			_turnFix = _turn[_giliran];
+
+			mode = 0;
+		}
+
+		//klo dr game cuma bisa back pakek esc
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 		{
 			std::cout << "ESC" << std::endl;

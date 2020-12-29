@@ -45,6 +45,8 @@ private:
 
 	int _skill;
 
+	int _lastPos;
+
 
 	bool diMarkas[4][4];
 	bool pionfinish[4][4];
