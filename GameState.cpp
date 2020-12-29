@@ -1105,7 +1105,8 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 				_rollButton.setFillColor(sf::Color::Yellow);
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					_skill = rand() % 3 + 1;
+					//_skill = rand() % 3 + 1;
+					std::cout << "skill-ke: "; std::cin >> _skill;
 					_dice.setTexture(&_diceHead[_skill - 1]);
 					_rollButton.setFillColor(sf::Color::White);
 					std::cout << _giliran << std::endl;
@@ -1144,8 +1145,9 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 									_rollButton.setFillColor(sf::Color::Yellow);
 									if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 									{
-										_move = rand() % 6 + 1;
-										_dice.setTexture(&_diceHead[_skill - 1]);
+										std::cout << "move: "; std::cin >> _move;
+										//_move = rand() % 6 + 1;
+										_dice.setTexture(&_diceHead[_move - 1]);
 										_rollButton.setFillColor(sf::Color::White);
 
 										bool goback = false;
@@ -1244,8 +1246,9 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								_rollButton.setFillColor(sf::Color::Yellow);
 								if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 								{
-									_move = rand() % 6 + 1;
-									_dice.setTexture(&_diceHead[_skill - 1]);
+									std::cout << "move: "; std::cin >> _move;
+									//_move = rand() % 6 + 1;
+									_dice.setTexture(&_diceHead[_move - 1]);
 									_rollButton.setFillColor(sf::Color::White);
 
 									for (int i = 0; i < _move; i++)
