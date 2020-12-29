@@ -18,6 +18,7 @@ private:
 	sf::Sprite _mapSprite;
 	sf::Sprite _pionSprite[4][4];
 	sf::Texture _pionTexture[4];
+	sf::Texture _pionShieldTexture[4];
 	sf::Font _font;
 	sf::Text _turn[4];
 	sf::Text _turnFix;

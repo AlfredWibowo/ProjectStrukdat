@@ -39,7 +39,7 @@ void GameState::Init(sf::RenderWindow& _window)
 	_dice.setTexture(&_diceHead[5]);
 
 	//map
-	if (!_mapTexture.loadFromFile(MAP_BG))
+	if (!_mapTexture.loadFromFile(MAP))
 	{
 		std::cout << "failed to open file" << std::endl;
 	}
@@ -50,6 +50,12 @@ void GameState::Init(sf::RenderWindow& _window)
 	_pionTexture[1].loadFromFile(PION_KUNING);
 	_pionTexture[2].loadFromFile(PION_BIRU);
 	_pionTexture[3].loadFromFile(PION_MERAH);
+
+	//pionShield
+	_pionShieldTexture[0].loadFromFile(PION_HIJAU_SHIELD);
+	_pionShieldTexture[1].loadFromFile(PION_KUNING_SHIELD);
+	_pionShieldTexture[2].loadFromFile(PION_BIRU_SHIELD);
+	_pionShieldTexture[3].loadFromFile(PION_MERAH_SHIELD);
 
 	//posisi awal hijau
 	_pionSprite[0][0].setPosition(sf::Vector2f(113, 75));
@@ -523,8 +529,9 @@ void GameState::collision(int giliran, int pion_ke)
 						if (shieldpion[b][c])
 						{
 							std::cout << "pion ada shield" << std::endl;
-							setBack(_pion, giliran, pion_ke, diMarkas);
+							/*setBack(_pion, giliran, pion_ke, diMarkas);*/
 							shieldpion[b][c] = false;
+							_pionSprite[b][c].setTexture(_pionTexture[b]);
 						}
 						else
 						{
@@ -1129,7 +1136,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 						{
 							std::cout << "Special skill jalan ke pion yg ditekan " << std::endl;
-							mode = 0;
+							
 
 							switch (_skill)
 							{
@@ -1285,6 +1292,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								}
 							case 3://shield
 								_pionSprite[b][a].setColor(sf::Color::White);
+								_pionSprite[b][a].setTexture(_pionShieldTexture[b]);
 								shieldpion[b][a] = true;
 								std::cout << "pion " << b << " " << a << " dpt shield" << std::endl;
 								if (_move != 6)
@@ -1304,13 +1312,16 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 									_giliran = 0;
 								}
 								_turnFix = _turn[_giliran];
+
 							}
+							mode = 0;
 						}
 					}
 					else
 					{
 						_pionSprite[b][a].setColor(sf::Color::White);
 					}
+					
 				}
 			}
 		}
