@@ -529,7 +529,7 @@ void GameState::collision(int giliran, int pion_ke)
 						if (shieldpion[b][c])
 						{
 							std::cout << "pion ada shield" << std::endl;
-							/*setBack(_pion, giliran, pion_ke, diMarkas);*/
+							setNext(_pion, giliran, pion_ke, diMarkas);
 							shieldpion[b][c] = false;
 							_pionSprite[b][c].setTexture(_pionTexture[b]);
 						}
