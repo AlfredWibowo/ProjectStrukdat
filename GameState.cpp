@@ -375,7 +375,89 @@ void GameState::setBack(Node* pos[4][4], int _warna, int _pionKe, bool markas[4]
 		else
 		{
 			setdiMarkas(true, _warna, _pionKe);
-			_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f());
+			if (_giliran == 0)
+			{
+				if (_pionKe == 0)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(113, 75));
+
+				}
+				else if (_pionKe == 1)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(75, 113));
+				}
+				else if (_pionKe == 2)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(113, 151));
+				}
+				else if (_pionKe == 3)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(151, 113));
+				}
+			}
+			//kuning
+			else if (_giliran == 1)
+			{
+				if (_pionKe == 0)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(113, 414));
+				}
+				else if (_pionKe == 1)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(75, 452));
+				}
+				else if (_pionKe == 2)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(113, 490));
+				}
+				else if (_pionKe == 3)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(151, 452));
+				}
+			}
+			//biru
+			else if (_giliran == 2)
+			{
+				if (_pionKe == 0)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(452, 414));
+				}
+				else if (_pionKe == 1)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(414, 452));
+				}
+				else if (_pionKe == 2)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(452, 490));
+
+				}
+				else if (_pionKe == 3)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(490, 452));
+				}
+			}
+			//merah
+			else if (_giliran == 3)
+			{
+				if (_pionKe == 0)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(452, 75));
+
+				}
+				else if (_pionKe == 1)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(414, 113));
+				}
+				else if (_pionKe == 2)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(452, 151));
+				}
+				else if (_pionKe == 3)
+				{
+					_pionSprite[_giliran][_pionKe].setPosition(sf::Vector2f(490, 113));
+				}
+			}
+
 		}
 	}
 }
@@ -617,7 +699,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 						{
 							if (goback)
 							{
-								setBack(_pion, _giliran, pion_ke);
+								setBack(_pion, _giliran, pion_ke, diMarkas);
 								Draw(_window);
 								Sleep(300);
 							}
@@ -742,7 +824,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 										{
 											if (goback)
 											{
-												setBack(_pion, _giliran, a);
+												setBack(_pion, _giliran, a, diMarkas);
 												Draw(_window);
 												Sleep(300);
 											}
@@ -782,7 +864,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								{
 									if (goback)
 									{
-										setBack(_pion, _giliran, a);
+										setBack(_pion, _giliran, a, diMarkas);
 										Draw(_window);
 										Sleep(300);
 									}
@@ -912,7 +994,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 											{
 												if (goback)
 												{
-													setBack(_pion, b, a);
+													setBack(_pion, b, a, diMarkas);
 													Draw(_window);
 													Sleep(300);
 												}
@@ -1007,10 +1089,11 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 
 									for (int i = 0; i < _move; i++)
 									{
-											setBack(_pion, b, a);
+											setBack(_pion, b, a, diMarkas);
 											Draw(_window);
 											Sleep(300);
 									}
+									_pionSprite[b][a].setColor(sf::Color::White);
 
 									collision(b, a);
 
