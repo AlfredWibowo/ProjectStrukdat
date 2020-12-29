@@ -13,6 +13,7 @@ void GameState::Init(sf::RenderWindow& _window)
 	}
 	_music.setLoop(true);
 	_music.play();
+	_music.setVolume(10);
 
 	//roll button
 	if (!_rollTexture.loadFromFile(ROLL_BUTTON))
@@ -21,7 +22,7 @@ void GameState::Init(sf::RenderWindow& _window)
 	}
 	_rollButton.setTexture(&_rollTexture);
 	_rollButton.setSize(sf::Vector2f(250, 100));
-	_rollButton.setPosition(sf::Vector2f(HEIGHT / 4, HEIGHT - _rollButton.getSize().y - 20));
+	_rollButton.setPosition(sf::Vector2f(WIDTH / 10, HEIGHT - _rollButton.getSize().y - 20));
 
 
 	//dice
@@ -34,7 +35,7 @@ void GameState::Init(sf::RenderWindow& _window)
 	_diceHead[4].loadFromFile(DICE_FIVE);
 	_diceHead[5].loadFromFile(DICE_SIX);
 
-	_dice.setPosition(sf::Vector2f(1000 - 215, 600 - _rollButton.getSize().y - _dice.getSize().y - 50));
+	_dice.setPosition(sf::Vector2f(WIDTH / 4 + _dice.getSize().x * 2, HEIGHT - _dice.getSize().y - 50));
 	_dice.setTexture(&_diceHead[5]);
 
 	//map
@@ -99,7 +100,7 @@ void GameState::Init(sf::RenderWindow& _window)
 	{
 		_turn[i].setFont(_font);
 		_turn[i].setCharacterSize(60);
-		_turn[i].setPosition(sf::Vector2f(3.7 * _rollButton.getPosition().x, 1 / 4 * HEIGHT));
+		_turn[i].setPosition(sf::Vector2f(_dice.getPosition().x + WIDTH/4, 1 / 4 * HEIGHT + 60));
 	}
 
 
@@ -115,8 +116,12 @@ void GameState::Init(sf::RenderWindow& _window)
 
 	_turnFix = _turn[0];
 
-	//background
-	_bg.setFillColor(sf::Color::Cyan);
+	//bg
+	if (!_bgTexture.loadFromFile(GAME_BG))
+	{
+		std::cout << "failed to open file" << std::endl;
+	}
+	_bg.setTexture(&_bgTexture);
 	_bg.setSize(sf::Vector2f(WIDTH, HEIGHT));
 
 	//LDL
@@ -272,16 +277,16 @@ void GameState::Init(sf::RenderWindow& _window)
 		}
 	}
 
-	_nameSkill[0].setString("Maju");
-	_nameSkill[1].setString("Mundur");
-	_nameSkill[2].setString("Shield");
+	_nameSkill[0].setString("MAJU");
+	_nameSkill[1].setString("MUNDUR");
+	_nameSkill[2].setString("SHIELD");
 
 	for (int i = 0; i < 3; i++)
 	{
 		_nameSkill[i].setFillColor(sf::Color::Black);
 		_nameSkill[i].setFont(_font);
 		_nameSkill[i].setCharacterSize(60);
-		_nameSkill[i].setPosition(sf::Vector2f(3.7 * _rollButton.getPosition().x, 1 / 4 * HEIGHT + 200));
+		_nameSkill[i].setPosition(sf::Vector2f(_turn[i].getPosition().x, _turn[i].getPosition().y * 2 + 60));
 	}
 
 	_skillFix = _nameSkill[0];

@@ -22,6 +22,7 @@ private:
 	sf::Text _turn[4];
 	sf::Text _turnFix;
 	sf::RectangleShape _bg;
+	sf::Texture _bgTexture;
 	sf::Music _music;
 
 	LDL _mapLuar;
