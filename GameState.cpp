@@ -829,7 +829,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 				{
 					for (int a = 0; a < 4; a++)
 					{
-						if (_pionSprite[_giliran][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)) && !pionfinish[_giliran][a])
+						if (_pionSprite[_giliran][a].getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)) && !pionfinish[_giliran][a] && !diMarkas[_giliran][a])
 						{
 							_pionSprite[_giliran][a].setColor(sf::Color::Magenta);
 
@@ -1110,8 +1110,8 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 				_rollButton.setFillColor(sf::Color::Yellow);
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					//_skill = rand() % 3 + 1;
-					std::cout << "skill-ke: "; std::cin >> _skill;
+					_skill = rand() % 3 + 1;
+					//std::cout << "skill-ke: "; std::cin >> _skill;
 					_dice.setTexture(&_diceHead[_skill - 1]);
 					_rollButton.setFillColor(sf::Color::White);
 					std::cout << _giliran << std::endl;
@@ -1157,8 +1157,8 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 									_rollButton.setFillColor(sf::Color::Yellow);
 									if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 									{
-										std::cout << "move: "; std::cin >> _move;
-										//_move = rand() % 6 + 1;
+										//std::cout << "move: "; std::cin >> _move;
+										_move = rand() % 6 + 1;
 										_dice.setTexture(&_diceHead[_move - 1]);
 										_rollButton.setFillColor(sf::Color::White);
 
@@ -1257,8 +1257,8 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								_rollButton.setFillColor(sf::Color::Yellow);
 								if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 								{
-									std::cout << "move: "; std::cin >> _move;
-									//_move = rand() % 6 + 1;
+									//std::cout << "move: "; std::cin >> _move;
+									_move = rand() % 6 + 1;
 									_dice.setTexture(&_diceHead[_move - 1]);
 									_rollButton.setFillColor(sf::Color::White);
 
@@ -1373,7 +1373,7 @@ void GameState::Draw(sf::RenderWindow& _window)
 			_window.draw(_pionSprite[i][j]);
 		}
 	}
-	if (mode == 4)
+	if (mode > 2)
 	{
 		_window.draw(_skillFix);
 	}
