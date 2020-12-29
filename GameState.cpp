@@ -356,17 +356,28 @@ void GameState::setNext(Node* pos[4][4], int _warna, int _pionKe, bool markas[4]
 	}
 }
 
-void GameState::setBack(Node* pos[4][4], int _warna, int _pionKe)
+void GameState::setBack(Node* pos[4][4], int _warna, int _pionKe, bool markas[4][4])
 {
-	if (pos[_warna][_pionKe] == _mapWarna[_warna].getHead())
+	if (markas[_warna][_pionKe] == false)
 	{
-		pos[_warna][_pionKe] = _exit[_warna];
+		if (pos[_warna][_pionKe] != _entry[_warna])
+		{
+			if (pos[_warna][_pionKe] == _mapWarna[_warna].getHead())
+			{
+				pos[_warna][_pionKe] = _exit[_warna];
+			}
+			else
+			{
+				pos[_warna][_pionKe] = pos[_warna][_pionKe]->prev;
+			}
+			_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f(pos[_warna][_pionKe]->_posX, pos[_warna][_pionKe]->_posY));
+		}
+		else
+		{
+			setdiMarkas(true, _warna, _pionKe);
+			_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f());
+		}
 	}
-	else
-	{
-		pos[_warna][_pionKe] = pos[_warna][_pionKe]->prev;
-	}
-	_pionSprite[_warna][_pionKe].setPosition(sf::Vector2f(pos[_warna][_pionKe]->_posX, pos[_warna][_pionKe]->_posY));
 }
 
 void GameState::setdiMarkas(bool n, int i, int j)
