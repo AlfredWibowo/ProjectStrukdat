@@ -82,7 +82,7 @@ void TutorialState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vec
 			{
 				_nextButton.setFillColor(sf::Color::White);
 			}
-
+			break;
 		case 2:
 			if (_backButton.getGlobalBounds().contains(static_cast<float>(MousePos.x), static_cast<float>(MousePos.y)))
 			{
@@ -113,6 +113,7 @@ void TutorialState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vec
 			{
 				_prevButton.setFillColor(sf::Color::White);
 			}
+			break;
 		}
 
 

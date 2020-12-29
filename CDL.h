@@ -19,7 +19,7 @@ public:
 	}
 };
 
-class LDL
+class CDL
 {
 private:
 	Node* head;
@@ -27,7 +27,7 @@ private:
 	int size;
 
 public:
-	LDL()
+	CDL()
 	{
 		head = NULL;
 		tail = NULL;

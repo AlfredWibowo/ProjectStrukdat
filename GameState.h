@@ -1,6 +1,6 @@
 #pragma once
 #include "MainMenuState.h"
-#include "LDL.h"
+#include "CDL.h"
 #include <Windows.h>s
 
 class GameState :public State
@@ -26,8 +26,8 @@ private:
 	sf::Texture _bgTexture;
 	sf::Music _music;
 
-	LDL _mapLuar;
-	LDL _mapWarna[4];
+	CDL _mapLuar;
+	CDL _mapWarna[4];
 
 	Node* _specialSkill[4];
 	sf::Text _nameSkill[4];

@@ -13,15 +13,6 @@ int main()
 	std::vector<State*> _state;
 	_state.push_back(new MainMenuState);
 	_state.back()->Init(_window);
-
-	/*sf::SoundBuffer buffer;
-	if (!buffer.loadFromFile("soundtrack/sound.wav")) {
-		return -1;
-	}*/
-
-	/*sf::Sound sound;
-	sound.setBuffer(buffer);
-	sound.play();*/
 		
 	while (_window.isOpen())
 	{
