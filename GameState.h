@@ -36,6 +36,9 @@ private:
 	bool _onSpecialSpot = false;
 	bool shieldpion[4][4];
 
+	std::vector<Node*> disabled;
+	std::vector<sf::RectangleShape> disabledshape;
+
 	Node* _pion[4][4];
 	Node* _entry[4];
 	Node* _exit[4];
