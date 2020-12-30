@@ -49,6 +49,55 @@ public:
 
 	}
 
+
+	int getSize()
+	{
+		return size;
+	}
+
+	void deleteNode(Node* toDel)
+	{
+		Node* position;
+		position = head;
+
+		for (int i = 0; i < size; i++)
+		{
+			if (position != toDel)
+			{
+				position = position->next;
+			}
+		}
+
+		if (position->next != NULL && position->prev != NULL)
+		{
+			position->prev->next = position->next;
+			position->next->prev = position->prev;
+		}
+		else if (position->next == NULL && position->prev == NULL)
+		{
+			head = NULL;
+			tail = NULL;
+		}
+		else if (position->next == NULL)
+		{
+			position->prev->next = NULL;
+			tail = position->prev;
+		}
+		else if (position->prev == NULL)
+		{
+			position->next->prev = NULL;
+			head = position->next;
+		}
+
+		delete position;
+
+		tail->next = head;
+		head->prev = tail;
+
+		size--;
+		std::cout << getSize() << std::endl;
+	}
+
 	void add(int posX, int posY)
 	{
 		Node* temp = new Node(posX, posY);
@@ -66,5 +115,6 @@ public:
 		}
 		tail->next = head;
 		head->prev = tail;
-	};
+		size++;
+	}
 };

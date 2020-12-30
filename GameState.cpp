@@ -13,7 +13,7 @@ void GameState::Init(sf::RenderWindow& _window)
 	}
 	_music.setLoop(true);
 	_music.play();
-	_music.setVolume(10);
+	_music.setVolume(0);
 
 	//roll button
 	if (!_rollTexture.loadFromFile(ROLL_BUTTON))
@@ -106,7 +106,7 @@ void GameState::Init(sf::RenderWindow& _window)
 	{
 		_turn[i].setFont(_font);
 		_turn[i].setCharacterSize(60);
-		_turn[i].setPosition(sf::Vector2f(_dice.getPosition().x + WIDTH/4, 1 / 4 * HEIGHT + 60));
+		_turn[i].setPosition(sf::Vector2f(_dice.getPosition().x + WIDTH / 4, 1 / 4 * HEIGHT + 60));
 	}
 
 
@@ -135,6 +135,7 @@ void GameState::Init(sf::RenderWindow& _window)
 
 	//pintu masuk hijau
 	_mapLuar.add(56, 245);
+
 	_entry[0] = _mapLuar.getTail();
 	_pion[0][0] = _mapLuar.getTail();
 
@@ -303,6 +304,8 @@ void GameState::Init(sf::RenderWindow& _window)
 	{
 		_finish[i] = 0;
 	}
+
+	std::cout << "Map Size: " << _mapLuar.getSize() << std::endl;
 }
 
 bool GameState::cek_di_mapWarna(Node* pos[4][4], int _warna, int pion_ke)
@@ -695,11 +698,11 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 				_rollButton.setFillColor(sf::Color::Yellow);
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
-					//std::cout << "move: "; std::cin >> _move;
-					_move = rand() % 6 + 1;
+					std::cout << "move: "; std::cin >> _move;
+					//_move = rand() % 6 + 1;
 					_dice.setTexture(&_diceHead[_move - 1]);
 					_rollButton.setFillColor(sf::Color::White);
-					std::cout << "giliran = " << _giliran << " roll dadu = " << _move << std::endl;
+					std::cout << "giliran = " << _giliran << std::endl;
 					mode = 1;
 				}
 			}
@@ -753,6 +756,31 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 						for (int i = 0; i < _move; i++)
 						{
 							setNext(_pion, _giliran, pion_ke, diMarkas);
+							//mapnya didelete klo dpt dadu 3
+							if (_move == 3)
+							{
+								bool del = true;
+								for (int z = 0; z < 4; z++)//_giliran
+								{
+									for (int p = 0; p < 4; p++) //pion ke
+									{
+										if (_pion[_giliran][pion_ke]->prev == _entry[z] || _pion[_giliran][pion_ke]->prev == _exit[z] || _pion[_giliran][pion_ke]->prev == _pion[z][p])
+										{
+											if (_giliran != z)
+												del = false;
+										}
+									}
+								}
+								if (del)
+								{
+									disabled.push_back(_pion[_giliran][pion_ke]->prev);
+									disabledshape.push_back(sf::RectangleShape());
+									disabledshape.back().setPosition(disabled.back()->_posX, disabled.back()->_posY);
+
+									_mapLuar.deleteNode(_pion[_giliran][pion_ke]->prev);
+									std::cout << "Map Size: " << _mapLuar.getSize() << std::endl;
+								}
+							}
 							Draw(_window);
 							Sleep(300);
 						}
@@ -763,7 +791,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					collision(_giliran, pion_ke);
 
 					add_finish(_giliran, pion_ke);
-				
+
 					if (_finish[_giliran] == 4)
 					{
 						std::cout << "Masuk ke vector rank" << std::endl;
@@ -782,7 +810,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 						{
 							_giliran++;
 						}
-						
+
 						for (int c = 0; c < _rank.size(); c++)
 						{
 							if (_giliran == _rank[c])
@@ -798,7 +826,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 						mode = 0;
 					}
 				}
-				else if(jumlah_pion_yg_diluar(diMarkas, _giliran) == 0)//klo ga ad yg diluar markas langsung ganti turn
+				else if (jumlah_pion_yg_diluar(diMarkas, _giliran) == 0)//klo ga ad yg diluar markas langsung ganti turn
 				{
 					if (_move != 6)
 					{
@@ -875,6 +903,11 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 											for (int i = 0; i < _move; i++)
 											{
 												setNext(_pion, _giliran, a, diMarkas);
+												if (_move == 3)
+												{
+													_mapLuar.deleteNode(_pion[_giliran][a]->prev);
+													std::cout << "Map Size: " << _mapLuar.getSize() << std::endl;
+												}
 												Draw(_window);
 												Sleep(300);
 											}
@@ -898,6 +931,11 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 										else
 										{
 											setNext(_pion, _giliran, a, diMarkas);
+											if (_move == 3)
+											{
+												_mapLuar.deleteNode(_pion[_giliran][a]->prev);
+												std::cout << "Map Size: " << _mapLuar.getSize() << std::endl;
+											}
 											Draw(_window);
 											Sleep(300);
 											if (_pion[_giliran][a] == _mapWarna[_giliran].getTail())
@@ -976,7 +1014,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 						if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 						{
 							_lastPos = a; //buat special skill shield
-
+							
 							bool goback = false; //klo nyampek finish jdi true
 							for (int i = 0; i < _move; i++)
 							{
@@ -998,11 +1036,11 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								}
 							}
 
-
 							_pionSprite[_giliran][a].setColor(sf::Color::White);
+
 							//tabrakan
 							collision(_giliran, a);
-							
+
 							//klo ad yg finish finish[i]++
 							add_finish(_giliran, a);
 
@@ -1061,10 +1099,10 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 				{
 					_skill = rand() % 3 + 1;
-					//std::cout << "skill-ke: "; std::cin >> _skill;
+					std::cout << "skill-ke: "; std::cin >> _skill;
 					_dice.setTexture(&_diceHead[_skill - 1]);
 					_rollButton.setFillColor(sf::Color::White);
-					std::cout << "giliran = " << _giliran << " dpt skill ke = " << _skill << std::endl;
+					std::cout << _giliran << std::endl;
 
 					if (_skill == 3)
 					{
@@ -1109,7 +1147,6 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 									_move = rand() % 5 + 1;
 									_dice.setTexture(&_diceHead[_move - 1]);
 									_rollButton.setFillColor(sf::Color::White);
-									std::cout << "giliran = " << _giliran << " skill maju sebanyak = " << _move << std::endl;
 
 									bool goback = false; //klo nyampek finish jdi true
 									for (int i = 0; i < _move; i++)
@@ -1165,7 +1202,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 								}
 								break;
 
-								
+
 
 							case 2://mundur
 								_rollButton.setFillColor(sf::Color::Yellow);
@@ -1175,13 +1212,12 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 									_move = rand() % 5 + 1;
 									_dice.setTexture(&_diceHead[_move - 1]);
 									_rollButton.setFillColor(sf::Color::White);
-									std::cout << "giliran = " << _giliran << " skill mundur sebanyak = " << _move << std::endl;
 
 									for (int i = 0; i < _move; i++)
 									{
-											setBack(_pion, b, a, diMarkas);
-											Draw(_window);
-											Sleep(300);
+										setBack(_pion, b, a, diMarkas);
+										Draw(_window);
+										Sleep(300);
 									}
 									_pionSprite[b][a].setColor(sf::Color::White);
 
@@ -1212,7 +1248,7 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 											_giliran = 0;
 										}
 										_turnFix = _turn[_giliran];
-										
+
 									}
 								}
 								break;
@@ -1224,8 +1260,8 @@ void GameState::Input(sf::RenderWindow& _window, sf::Event& _event, std::vector<
 					{
 						_pionSprite[b][a].setColor(sf::Color::White);
 					}
-					
-					
+
+
 				}
 			}
 		}
@@ -1288,6 +1324,12 @@ void GameState::Draw(sf::RenderWindow& _window)
 		{
 			_window.draw(_pionSprite[i][j]);
 		}
+	}
+	for (int a = 0; a < disabledshape.size(); a++)
+	{
+		disabledshape[a].setSize(sf::Vector2f(36, 36));
+		disabledshape[a].setFillColor(sf::Color(248, 24, 148));
+		_window.draw(disabledshape[a]);
 	}
 	if (mode > 2)
 	{
